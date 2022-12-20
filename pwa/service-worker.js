@@ -1,4 +1,4 @@
-let url = "/osTicket-develop/";
+let url = "/";
 
 self.addEventListener("install", function(event) {
 	event.waitUntil(

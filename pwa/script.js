@@ -37,7 +37,7 @@ function startPwa(firstStart) {
 	}
 
 	window.addEventListener("load", () => {
-		navigator.serviceWorker.register("/osTicket-develop/pwa/service-worker.js?v="+d.getTime())
+		navigator.serviceWorker.register("/pwa/service-worker.js?v="+d.getTime())
 		.then(registration => {
 			console.log("Service Worker is registered", registration);
 			enableButton.parentNode.remove();
