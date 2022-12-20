@@ -36,16 +36,18 @@ function startPwa(firstStart) {
 		location.reload();
 	}
 
-	window.addEventListener("load", () => {
-		navigator.serviceWorker.register("/pwa/service-worker.js?v="+d.getTime())
-		.then(registration => {
-			console.log("Service Worker is registered", registration);
-			enableButton.parentNode.remove();
-		})
-		.catch(err => {
-			console.error("Registration failed:", err);
+	if ('serviceWorker' in navigator) {
+		window.addEventListener("load", () => {
+			navigator.serviceWorker.register("/pwa/service-worker.js?v="+d.getTime())
+			.then(registration => {
+				console.log("Service Worker is registered", registration);
+				enableButton.parentNode.remove();
+			})
+			.catch(err => {
+				console.error("Registration failed:", err);
+			});
 		});
-	});
+	}
 }
 
 function cacheLinks() {
