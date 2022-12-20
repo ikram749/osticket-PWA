@@ -47,7 +47,7 @@ function startPwa(firstStart) {
 				console.error("Registration failed:", err);
 			});
 		});
-	}
+	} else console.log('Your browser does not support the Service-Worker!');
 }
 
 function cacheLinks() {
