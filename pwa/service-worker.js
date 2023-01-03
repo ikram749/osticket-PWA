@@ -28,12 +28,11 @@ self.addEventListener("install", function(event) {
 				url+"js/redactor-plugins.js",
 				url+"js/redactor-osticket.js",
 				url+"js/select2.min.js",
-				//url+"pwa/script.js"
+				url+"pwa/manifest.json"
 			]);
 		})
 	);
 });
-
 
 
 
