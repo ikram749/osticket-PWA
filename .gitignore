@@ -19,3 +19,5 @@ include/mpdf/tmp
 nbproject/
 
 .history
+
+include/ost-config.php
