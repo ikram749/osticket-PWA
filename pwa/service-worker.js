@@ -6,7 +6,7 @@ self.addEventListener("install", function(event) {
 			console.log(cache);
 			return cache.addAll([
 				url,
-				url+"css/osticket.css",
+				//url+"css/osticket.css",
 				url+"css/theme.css",
 				url+"css/print.css",
 				url+"scp/css/typeahead.css",
