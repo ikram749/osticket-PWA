@@ -12,12 +12,12 @@ enableButton.addEventListener("click", function() {
 
 removeButton.addEventListener("click", function() {
 	removestorage();
-	//location.reload();
 });
 
 installButton.addEventListener("click", function() {
 	const confirm_box = confirm("Are you sure you want to enable PWA?");
 	if(confirm_box) {
+		console.log("confirm_box");
 		document.getElementById("install").style.display = "initial";
 		setTimeout(cacheLinks, 500);
 	}
@@ -50,7 +50,7 @@ function startPwa(firstStart) {
 	} else console.log('Your browser does not support the Service-Worker!');
 }
 
-function cacheLinks() {
+/* function cacheLinks() {
 	self.addEventListener('install', event => {
 		const links = [];
 	  
@@ -65,9 +65,21 @@ function cacheLinks() {
 		  })
 		);
 	  });
+} */
+
+function cacheLinks() {
+	caches.open("pwa").then(function(cache) {
+		const linksFound = [];
+		document.querySelectorAll("a").forEach(function(a) {
+			linksFound.push(a.href);
+		});
+		console.log(linksFound);
+		cache.addAll(linksFound);
+	});
 }
 
 function removestorage() {
 	window.localStorage.clear();
 	console.log("clear");
+	location.reload();
 }
