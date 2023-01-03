@@ -7,8 +7,8 @@ self.addEventListener("install", function(event) {
 			return cache.addAll([
 				url,
 				//url+"css/osticket.css",
-				url+"css/theme.css",
-				url+"css/print.css",
+				//url+"css/theme.css",
+				//url+"css/print.css",
 				url+"scp/css/typeahead.css",
 				url+"css/ui-lightness/jquery-ui-1.13.1.custom.min.css",
 				url+"css/jquery-ui-timepicker-addon.css",
@@ -28,7 +28,7 @@ self.addEventListener("install", function(event) {
 				url+"js/redactor-plugins.js",
 				url+"js/redactor-osticket.js",
 				url+"js/select2.min.js",
-				url+"pwa/script.js"
+				//url+"pwa/script.js"
 			]);
 		})
 	);
