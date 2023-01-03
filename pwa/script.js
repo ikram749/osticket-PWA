@@ -36,8 +36,8 @@ function startPwa(firstStart) {
 		location.reload();
 	}
 
-	if ('serviceWorker' in navigator) {
-		window.addEventListener("load", () => {
+	window.addEventListener("load", () => {
+		if ('serviceWorker' in navigator) {
 			//navigator.serviceWorker.register("/pwa/service-worker.js?v="+d.getTime())
 			navigator.serviceWorker.register("/pwa/pwabuilder-sw.js?v="+d.getTime(), {
 				scope: '/pwa/' // THIS IS REQUIRED FOR RUNNING A PROGRESSIVE WEB APP FROM A NON_ROOT PATH
@@ -49,8 +49,26 @@ function startPwa(firstStart) {
 			.catch(err => {
 				console.error("Registration failed:", err);
 			});
-		});
-	} else console.log('Your browser does not support the Service-Worker!');
+
+			//sync
+			navigator.serviceWorker.ready.then(async (registration) => {
+				if ('periodicSync' in registration) {
+				  const status = await navigator.permissions.query({
+					// @ts-expect-error
+					name: 'periodic-background-sync',
+				  });
+		
+				  if (status.state === 'granted') {
+					await registration.periodicSync.register(UPDATE_CHECK, {
+					  minInterval: 24 * 60 * 60 * 1000,
+					});
+				  }
+				}
+			});
+
+		} else console.log('Your browser does not support the Service-Worker!');
+	});
+	
 }
 
 /* function cacheLinks() {
