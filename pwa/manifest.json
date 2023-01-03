@@ -462,7 +462,7 @@
 	"dir": "auto",
 	"lang": "en",
 	"display_override": [
-	  "browser"
+	  "standalone"
 	],
 	"scope": "https://ik-ram.net/",
 	"categories": [
