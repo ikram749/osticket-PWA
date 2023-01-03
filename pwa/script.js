@@ -59,7 +59,8 @@ function cacheLinks() {
 		});
 	  
 		event.waitUntil(
-		  caches.open('my-cache').then(cache => {
+		  caches.open('pwa').then(cache => {
+			console.log(links);
 			return cache.addAll(links);
 		  })
 		);
@@ -68,4 +69,5 @@ function cacheLinks() {
 
 function removestorage() {
 	window.localStorage.clear();
+	console.log("clear");
 }
