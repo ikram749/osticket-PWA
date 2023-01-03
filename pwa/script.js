@@ -38,7 +38,8 @@ function startPwa(firstStart) {
 
 	if ('serviceWorker' in navigator) {
 		window.addEventListener("load", () => {
-			navigator.serviceWorker.register("/pwa/service-worker.js?v="+d.getTime())
+			//navigator.serviceWorker.register("/pwa/service-worker.js?v="+d.getTime())
+			navigator.serviceWorker.register("/pwa/pwabuilder-sw.js?v="+d.getTime())
 			.then(registration => {
 				console.log("Service Worker is registered", registration);
 				enableButton.parentNode.remove();
@@ -68,7 +69,7 @@ function startPwa(firstStart) {
 } */
 
 function cacheLinks() {
-	caches.open("pwa").then(function(cache) {
+	caches.open("pwabuilder-offline-page").then(function(cache) {
 		const linksFound = [];
 		document.querySelectorAll("a").forEach(function(a) {
 			linksFound.push(a.href);
