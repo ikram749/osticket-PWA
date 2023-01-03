@@ -330,7 +330,8 @@
 		},
 		{
 		  "src": "android/android-launchericon-512-512.png",
-		  "sizes": "512x512"
+		  "sizes": "512x512",
+			 "purpose": "any maskable"
 		},
 		{
 		  "src": "android/android-launchericon-192-192.png",
@@ -461,10 +462,7 @@
 	"dir": "auto",
 	"lang": "en",
 	"display_override": [
-	  "browser",
-	  "standalone",
-	  "minimal-ui",
-	  "fullscreen"
+	  "browser"
 	],
 	"scope": "https://ik-ram.net/",
 	"categories": [
