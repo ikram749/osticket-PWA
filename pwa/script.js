@@ -40,7 +40,7 @@ function startPwa(firstStart) {
 		window.addEventListener("load", () => {
 			//navigator.serviceWorker.register("/pwa/service-worker.js?v="+d.getTime())
 			navigator.serviceWorker.register("/pwa/pwabuilder-sw.js?v="+d.getTime(), {
-				scope: '.' // THIS IS REQUIRED FOR RUNNING A PROGRESSIVE WEB APP FROM A NON_ROOT PATH
+				scope: '/pwa/' // THIS IS REQUIRED FOR RUNNING A PROGRESSIVE WEB APP FROM A NON_ROOT PATH
 			})
 			.then(registration => {
 				console.log("Service Worker is registered", registration);
