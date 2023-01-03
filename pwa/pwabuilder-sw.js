@@ -15,9 +15,39 @@ self.addEventListener("message", (event) => {
 
 self.addEventListener('install', async (event) => {
   event.waitUntil(
-    caches.open(CACHE)
-      .then((cache) => cache.add(offlineFallbackPage))
+    //caches.open(CACHE)
+      //.then((cache) => cache.add(offlineFallbackPage))
+
+      caches.open(CACHE).then(function(cache) {
+        console.log(cache);
+        return cache.addAll([
+          "/",
+          "/scp/css/typeahead.css",
+          "/css/ui-lightness/jquery-ui-1.13.1.custom.min.css",
+          "/css/jquery-ui-timepicker-addon.css",
+          "/css/thread.css",
+          "/css/redactor.css",
+          "/css/font-awesome.min.css",
+          "/css/flags.css",
+          "/css/rtl.css",
+          "/css/select2.min.css",
+          "/js/jquery-3.5.1.min.js",
+          "/js/jquery-ui-1.13.1.custom.min.js",
+          "/js/jquery-ui-timepicker-addon.js",
+          "/js/osticket.js",
+          "/js/filedrop.field.js",
+          "/scp/js/bootstrap-typeahead.js",
+          "/js/redactor.min.js",
+          "/js/redactor-plugins.js",
+          "/js/redactor-osticket.js",
+          "/js/select2.min.js",
+          "/pwa/offline.html",
+          "/pwa/manifest.json"
+        ]);
+      })
   );
+  
+
 });
 
 if (workbox.navigationPreload.isSupported()) {
