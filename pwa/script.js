@@ -39,7 +39,9 @@ function startPwa(firstStart) {
 	if ('serviceWorker' in navigator) {
 		window.addEventListener("load", () => {
 			//navigator.serviceWorker.register("/pwa/service-worker.js?v="+d.getTime())
-			navigator.serviceWorker.register("/pwa/pwabuilder-sw.js?v="+d.getTime())
+			navigator.serviceWorker.register("/pwa/pwabuilder-sw.js?v="+d.getTime(), {
+				scope: './' // THIS IS REQUIRED FOR RUNNING A PROGRESSIVE WEB APP FROM A NON_ROOT PATH
+			})
 			.then(registration => {
 				console.log("Service Worker is registered", registration);
 				enableButton.parentNode.remove();
