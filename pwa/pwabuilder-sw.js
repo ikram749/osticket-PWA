@@ -4,6 +4,10 @@ const CACHE = "pwa";
 
 const PRECACHE_ASSETS = [
   "/",
+  "/view.php",
+  "/open.php",
+  "/css/osticket.css",
+  "/assets/default/css/theme.css",
   "/scp/css/typeahead.css",
   "/css/ui-lightness/jquery-ui-1.13.1.custom.min.css",
   "/css/jquery-ui-timepicker-addon.css",
@@ -13,6 +17,8 @@ const PRECACHE_ASSETS = [
   "/css/flags.css",
   "/css/rtl.css",
   "/css/select2.min.css",
+  "/images/oscar-favicon-32x32.png",
+  "/images/oscar-favicon-16x16.png",
   "/js/jquery-3.5.1.min.js",
   "/js/jquery-ui-1.13.1.custom.min.js",
   "/js/jquery-ui-timepicker-addon.js",
@@ -25,8 +31,6 @@ const PRECACHE_ASSETS = [
   "/js/select2.min.js",
   "/pwa/offline.html",
   "/pwa/manifest.json",
-  "/view.php",
-  "/open.php"
 ];
 
 importScripts(
