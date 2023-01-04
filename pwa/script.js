@@ -51,18 +51,13 @@ function startPwa(firstStart) {
 			});
 
 			//sync
-			navigator.serviceWorker.ready.then(async (registration) => {
-				if ('periodicSync' in registration) {
-				  const status = await navigator.permissions.query({
-					// @ts-expect-error
-					name: 'periodic-background-sync',
-				  });
-		
-				  if (status.state === 'granted') {
-					await registration.periodicSync.register(UPDATE_CHECK, {
-					  minInterval: 24 * 60 * 60 * 1000,
-					});
-				  }
+			navigator.serviceWorker.ready.then(registration => {
+				if (registration.sync) {
+					// Background Sync is supported.
+					console.log('Background Sync is supported');
+				} else {
+					// Background Sync isn't supported.
+					console.log('Background Sync isn`t supported');
 				}
 			});
 
