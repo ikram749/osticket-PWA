@@ -119,3 +119,13 @@ function removestorage() {
 	console.log("clear");
 	location.reload();
 }
+
+
+window.addEventListener("online",  function(){
+	console.log("You are online!");
+	alert("You are online!");
+  });
+  window.addEventListener("offline", function(){
+	console.log("Oh no, you lost your network connection.");
+	alert("Oh no, you lost your network connection.");
+  });
