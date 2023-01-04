@@ -79,10 +79,18 @@ workbox.routing.registerRoute(
   })
 );
 
-self.addEventListener('activate', function (event) {
-  console.log('Claiming control');
-  return self.clients.claim();
+self.addEventListener("activate", event => {
+  event.waitUntil((async () => {
+    const names = await caches.keys();
+    await Promise.all(names.map(name => {
+      if (name !== CACHE) {
+        return caches.delete(name);
+      }
+    }));
+    await clients.claim();
+  })());
 });
+
 
 self.addEventListener('fetch', event => {
   event.respondWith((async () => {
@@ -93,9 +101,9 @@ self.addEventListener('fetch', event => {
           // Cache hit, let's send the cached resource.
           return cachedResponse;
       } else {
-          // Nothing in cache, let's go to the network.
-
-          // ...... truncated ....
+        const fetchResponse = await fetch(event.request);
+        cache.put(event.request, fetchResponse.clone());
+        return fetchResponse;
       }
   }))
 });
