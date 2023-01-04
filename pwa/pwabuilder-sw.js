@@ -128,7 +128,7 @@ self.addEventListener("sync", (event) => {
   //document.getElementById("text_pwa1").innerHTML = event;
   
   // Check if we had a movie search query to do.
-  /* if (event.tag === BACKGROUND_SEARCH_QUERY_TAG) {
+  if (event.tag === BACKGROUND_SEARCH_QUERY_TAG) {
     event.waitUntil(
       (async () => {
         // Get the query we were trying to do before.
@@ -161,7 +161,7 @@ self.addEventListener("sync", (event) => {
         );
       })()
     );
-  } */
+  }
 
   // Check if we had a movie details request to do.
   /* if (event.tag === BACKGROUND_MOVIE_DETAILS_TAG) {
