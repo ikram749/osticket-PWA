@@ -33,12 +33,6 @@ const PRECACHE_ASSETS = [
   "/pwa/manifest.json",
 ];
 
-const BACKGROUND_SEARCH_QUERY_TAG = 'background-search-query';
-const NEXT_LAUNCH_QUERY_RESULTS_TAG = 'next-launch-query-results';
-const BACKGROUND_MOVIE_DETAILS_TAG = 'background-movie-details';
-const NEXT_LAUNCH_MOVIE_DETAILS_TAG = 'next-launch-movie-details';
-
-
 importScripts(
   "https://storage.googleapis.com/workbox-cdn/releases/5.1.2/workbox-sw.js"
 );
@@ -47,15 +41,13 @@ self.importScripts("/pwa/localforage-1.10.0.min.js");
 // TODO: replace the following with the correct offline fallback page i.e.: const offlineFallbackPage = "offline.html";
 const offlineFallbackPage = "offline.html";
 
-
-
 self.addEventListener("message", (event) => {
   alert(event.data.alert);
   if (event.data && event.data.type === "SKIP_WAITING") {
     self.skipWaiting();
   }
 
-  if (event.data && event.data.type === 'IS_OFFLINE') {
+  if (event.data && event.data.type === "IS_OFFLINE") {
     alert(event);
   }
 });
@@ -79,33 +71,36 @@ workbox.routing.registerRoute(
   })
 );
 
-self.addEventListener("activate", event => {
-  event.waitUntil((async () => {
-    const names = await caches.keys();
-    await Promise.all(names.map(name => {
-      if (name !== CACHE) {
-        return caches.delete(name);
-      }
-    }));
-    await clients.claim();
-  })());
+self.addEventListener("activate", (event) => {
+  event.waitUntil(
+    (async () => {
+      const names = await caches.keys();
+      await Promise.all(
+        names.map((name) => {
+          if (name !== CACHE) {
+            return caches.delete(name);
+          }
+        })
+      );
+      await clients.claim();
+    })()
+  );
 });
 
-
-self.addEventListener('fetch', event => {
-  event.respondWith((async () => {
-      const cache = await caches.open(CACHE);
-      // Try the cache first.
-      const cachedResponse = await cache.match(event.request);
-      if (cachedResponse !== undefined) {
-          // Cache hit, let's send the cached resource.
-          return cachedResponse;
-      } else {
-        const fetchResponse = await fetch(event.request);
-        cache.put(event.request, fetchResponse.clone());
-        return fetchResponse;
-      }
-  }))
+self.addEventListener("fetch", (event) => {
+  event.respondWith(async () => {
+    const cache = await caches.open(CACHE);
+    // Try the cache first.
+    const cachedResponse = await cache.match(event.request);
+    if (cachedResponse !== undefined) {
+      // Cache hit, let's send the cached resource.
+      return cachedResponse;
+    } else {
+      const fetchResponse = await fetch(event.request);
+      cache.put(event.request, fetchResponse.clone());
+      return fetchResponse;
+    }
+  });
 });
 
 /* self.addEventListener("fetch", (event) => {
@@ -134,105 +129,79 @@ self.addEventListener('fetch', event => {
   }
 }); */
 
-
-
 // Network is back up, we're being awaken, let's do the requests we were trying to do before if any.
 self.addEventListener("sync", (event) => {
-  console.log(event);
-  //document.getElementById("text_pwa1").innerHTML = event;
-  
-  // Check if we had a movie search query to do.
-  if (event.tag === BACKGROUND_SEARCH_QUERY_TAG) {
-    event.waitUntil(
-      (async () => {
-        // Get the query we were trying to do before.
-        const query = await localforage.getItem(BACKGROUND_SEARCH_QUERY_TAG);
-        if (!query) {
-          return;
-        }
-        await localforage.removeItem(BACKGROUND_SEARCH_QUERY_TAG);
-
-        const response = await searchForMovies(query, true);
-        const data = await response.json();
-
-        // Store the results for the next time the user opens the app. The frontend will use it to
-        // populate the page.
-        await localforage.setItem(NEXT_LAUNCH_QUERY_RESULTS_TAG, data.Search);
-
-        // Let the user know, if they granted permissions before.
-        self.registration.showNotification(
-          `Your search for "${query}" is now ready`,
-          {
-            icon: "/favicon.svg",
-            body: "You can access the list of movies in the app",
-            actions: [
-              {
-                action: "view-results",
-                title: "Open app",
-              },
-            ],
-          }
-        );
-      })()
-    );
+  if (event.tag === "form-submission") {
+    event.waitUntil(sendFormData());
   }
-
-
-  // Check if we had a movie details request to do.
-  /* if (event.tag === BACKGROUND_MOVIE_DETAILS_TAG) {
-    event.waitUntil(
-      (async () => {
-        // Get the id we were trying to get details about before.
-        const id = await localforage.getItem(BACKGROUND_MOVIE_DETAILS_TAG);
-        if (!id) {
-          return;
-        }
-        await localforage.removeItem(BACKGROUND_MOVIE_DETAILS_TAG);
-
-        const response = await getMovieDetails(id, true);
-        const data = await response.json();
-
-        // Store the results for the next time the user opens the app. The frontend will use it to
-        // populate the details section.
-        await localforage.setItem(NEXT_LAUNCH_MOVIE_DETAILS_TAG, data);
-
-        // Let the user know, if they granted permissions before.
-        self.registration.showNotification(`Movie details are now ready`, {
-          icon: "/favicon.svg",
-          body: "You can access the details in the app",
-          actions: [
-            {
-              action: "view-details",
-              title: "Open app",
-            },
-          ],
-        });
-      })()
-    );
-  } */
 });
 
-async function searchForMovies(query, dontTryLater) {
-  let error = false;
-  let response = null;
+async function sendFormData() {
+  // Get stored form data from indexedDB
+  const data = await getFormDataFromIndexedDB();
 
-  try {
-      response = await fetch(`https://neighborly-airy-agate.glitch.me/api/movies/${query}`);
-      if (response.status !== 200) {
-          error = true;
-      }
-  } catch (e) {
-      error = true;
+  // Send form data to server
+  const response = await fetch("/submit-form", {
+    method: "POST",
+    body: data,
+  });
+
+  // Delete form data from indexedDB if the submission was successful
+  if (response.ok) {
+    deleteFormDataFromIndexedDB();
   }
 
-  if (error && !dontTryLater) {
-      requestBackgroundSyncForSearchQuery(query);
-      const cache = await caches.open(CACHE);
-      response = await cache.match('/offline-request-response.json');
-  }
-
-  return response;
+  // Show notification to confirm submission
+  const title = response.ok
+    ? "Form submitted successfully"
+    : "Error submitting form";
+  const options = {
+    body: response.ok
+      ? "Your form was submitted successfully"
+      : "There was an error submitting your form. Please try again later.",
+    icon: "/static/images/icon.png",
+  };
+  self.registration.showNotification(title, options);
 }
 
+function getFormDataFromIndexedDB() {
+  return new Promise((resolve, reject) => {
+    const request = indexedDB.open("form-data", 1);
+    request.onerror = reject;
+    request.onsuccess = (event) => {
+      const db = event.target.result;
+      const transaction = db.transaction(["form-data"], "readonly");
+      const store = transaction.objectStore("form-data");
+      const data = store.getAll();
+      data.onsuccess = () => resolve(data.result);
+    };
+  });
+}
 
+function storeFormDataInIndexedDB(formData) {
+  return new Promise((resolve, reject) => {
+    const request = indexedDB.open("form-data", 1);
+    request.onerror = reject;
+    request.onsuccess = (event) => {
+      const db = event.target.result;
+      const transaction = db.transaction(["form-data"], "readwrite");
+      const store = transaction.objectStore("form-data");
+      store.add({ formData });
+      resolve();
+    };
+  });
+}
 
+function deleteFormDataFromIndexedDB() {
+  return new Promise((resolve, reject) => {
+    const request = indexedDB.open("form-data", 1);
+    request.onerror = reject;
+    request.onsuccess = (event) => {
+      const db = event.target.result;
+      const transaction = db.transaction(["form-data"], "readwrite");
+      const store = transaction.objectStore("form-data");
+      store.clear();
+      resolve();
+    };
+  });
+}

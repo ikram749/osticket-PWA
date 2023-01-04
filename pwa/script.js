@@ -4,71 +4,69 @@ let enableButton = document.getElementById("enable");
 
 let removeButton = document.getElementById("remove");
 
-
-enableButton.addEventListener("click", function() {
-	this.disabled = true;
-	startPwa(true);
+enableButton.addEventListener("click", function () {
+  this.disabled = true;
+  startPwa(true);
 });
 
-removeButton.addEventListener("click", function() {
-	removestorage();
+removeButton.addEventListener("click", function () {
+  removestorage();
 });
 
-installButton.addEventListener("click", function() {
-	const confirm_box = confirm("Are you sure you want to enable PWA?");
-	if(confirm_box) {
-		console.log("confirm_box");
-		document.getElementById("install").style.display = "initial";
-		setTimeout(cacheLinks, 500);
-	}
+installButton.addEventListener("click", function () {
+  const confirm_box = confirm("Are you sure you want to enable PWA?");
+  if (confirm_box) {
+    console.log("confirm_box");
+    document.getElementById("install").style.display = "initial";
+    setTimeout(cacheLinks, 500);
+  }
 });
 
-if(localStorage["pwa-enabled"]) {
-	startPwa();
+if (localStorage["pwa-enabled"]) {
+  startPwa();
 }
 
 function startPwa(firstStart) {
-	const d = new Date();
+  const d = new Date();
 
-	localStorage["pwa-enabled"] = true;
+  localStorage["pwa-enabled"] = true;
 
-	if(firstStart) {
-		location.reload();
-	}
+  if (firstStart) {
+    location.reload();
+  }
 
-	window.addEventListener("load", () => {
-		if ('serviceWorker' in navigator) {
-			//navigator.serviceWorker.register("/pwa/service-worker.js?v="+d.getTime())
-			navigator.serviceWorker.register("/pwa/pwabuilder-sw.js?v="+d.getTime(), {
-				scope: '/pwa/' // THIS IS REQUIRED FOR RUNNING A PROGRESSIVE WEB APP FROM A NON_ROOT PATH
-			})
-			.then(registration => {
-				console.log("Service Worker is registered", registration);
-				enableButton.parentNode.remove();
-			})
-			.catch(err => {
-				console.error("Registration failed:", err);
-			});
+  window.addEventListener("load", () => {
+    if ("serviceWorker" in navigator) {
+      //navigator.serviceWorker.register("/pwa/service-worker.js?v="+d.getTime())
+      navigator.serviceWorker
+        .register("/pwa/pwabuilder-sw.js?v=" + d.getTime(), {
+          scope: "/pwa/", // THIS IS REQUIRED FOR RUNNING A PROGRESSIVE WEB APP FROM A NON_ROOT PATH
+        })
+        .then((registration) => {
+          console.log("Service Worker is registered", registration);
+          enableButton.parentNode.remove();
+        })
+        .catch((err) => {
+          console.error("Registration failed:", err);
+        });
 
-			//sync
-			navigator.serviceWorker.ready.then(registration => {
-				if (registration.sync) {
-					// Background Sync is supported.
-					console.log('Background Sync is supported');
-				} else {
-					// Background Sync isn't supported.
-					console.log('Background Sync isn`t supported');
-				}
-			});
+      //sync
+      navigator.serviceWorker.ready.then((registration) => {
+        if (registration.sync) {
+          // Background Sync is supported.
+          console.log("Background Sync is supported");
+        } else {
+          // Background Sync isn't supported.
+          console.log("Background Sync isn`t supported");
+        }
+      });
 
-			/* navigator.serviceWorker.controller.postMessage({ 
+      /* navigator.serviceWorker.controller.postMessage({ 
 				type: `IS_OFFLINE`
 				// add more properties if needed
 			  }); */
-
-		} else console.log('Your browser does not support the Service-Worker!');
-	});
-	
+    } else console.log("Your browser does not support the Service-Worker!");
+  });
 }
 
 /* function cacheLinks() {
@@ -89,43 +87,43 @@ function startPwa(firstStart) {
 } */
 
 function cacheLinks() {
-	caches.open("pwa").then(function(cache) {
-		const linksFound = [];
-		document.querySelectorAll("a").forEach(function(a) {
-			linksFound.push(a.href);
-		});
-		console.log(linksFound);
-		cache.addAll(linksFound);
-	});
+  caches.open("pwa").then(function (cache) {
+    const linksFound = [];
+    document.querySelectorAll("a").forEach(function (a) {
+      linksFound.push(a.href);
+    });
+    console.log(linksFound);
+    cache.addAll(linksFound);
+  });
 }
 
 function removestorage() {
-	self.addEventListener("activate", (e) => {
-		e.waitUntil(
-		  caches.keys().then((keyList) => {
-			return Promise.all(
-			  keyList.map((key) => {
-				if (key === cacheName) {
-				  return;
-				}
-				return caches.delete(key);
-			  })
-			);
-		  })
-		);
-	  });
-	  
-	window.localStorage.clear();
-	console.log("clear");
-	location.reload();
+  self.addEventListener("activate", (e) => {
+    e.waitUntil(
+      caches.keys().then((keyList) => {
+        return Promise.all(
+          keyList.map((key) => {
+            if (key === cacheName) {
+              return;
+            }
+            return caches.delete(key);
+          })
+        );
+      })
+    );
+  });
+
+  window.localStorage.clear();
+  console.log("clear");
+  location.reload();
 }
 
+window.addEventListener("online", function () {
+  console.log("You are online!");
+  alert("You are online!");
+});
+window.addEventListener("offline", function () {
+  console.log("Oh no, you lost your network connection.");
+  alert("Oh no, you lost your network connection.");
+});
 
-window.addEventListener("online",  function(){
-	console.log("You are online!");
-	alert("You are online!");
-  });
-  window.addEventListener("offline", function(){
-	console.log("Oh no, you lost your network connection.");
-	alert("Oh no, you lost your network connection.");
-  });
