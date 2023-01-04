@@ -61,6 +61,11 @@ function startPwa(firstStart) {
 				}
 			});
 
+			/* navigator.serviceWorker.controller.postMessage({ 
+				type: `IS_OFFLINE`
+				// add more properties if needed
+			  }); */
+
 		} else console.log('Your browser does not support the Service-Worker!');
 	});
 	

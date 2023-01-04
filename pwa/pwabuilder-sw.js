@@ -120,10 +120,7 @@ self.addEventListener('fetch', event => {
   }
 }); */
 
-navigator.serviceWorker.controller.postMessage({ 
-  type: `IS_OFFLINE`
-  // add more properties if needed
-});
+
 
 // Network is back up, we're being awaken, let's do the requests we were trying to do before if any.
 self.addEventListener("sync", (event) => {
