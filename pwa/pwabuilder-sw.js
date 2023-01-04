@@ -169,6 +169,7 @@ self.addEventListener("sync", (event) => {
     );
   }
 
+
   // Check if we had a movie details request to do.
   /* if (event.tag === BACKGROUND_MOVIE_DETAILS_TAG) {
     event.waitUntil(
@@ -202,6 +203,29 @@ self.addEventListener("sync", (event) => {
     );
   } */
 });
+
+async function searchForMovies(query, dontTryLater) {
+  let error = false;
+  let response = null;
+
+  try {
+      response = await fetch(`https://neighborly-airy-agate.glitch.me/api/movies/${query}`);
+      if (response.status !== 200) {
+          error = true;
+      }
+  } catch (e) {
+      error = true;
+  }
+
+  if (error && !dontTryLater) {
+      requestBackgroundSyncForSearchQuery(query);
+      const cache = await caches.open(CACHE);
+      response = await cache.match('/offline-request-response.json');
+  }
+
+  return response;
+}
+
 
 
 self.addEventListener("online",  function(){
