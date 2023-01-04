@@ -91,13 +91,14 @@ if (osTicket::is_ie())
 </head>
 <body>
 <div>
-	<p id="text_pwa">Before you enable the PWA, check out how slow this website is.</p>
-    <p id="text_pwa1"></p>
+	
 	<button id="enable">Enable the PWA</button>
     
 </div>
 <button id="install">Install this app</button>
 <button id="remove">reset</button>
+<p id="text_pwa">Before you enable the PWA, check out how slow this website is.</p>
+    <p id="text_pwa1"></p>
 
     <div id="container">
         <?php
