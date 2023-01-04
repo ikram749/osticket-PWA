@@ -1,6 +1,6 @@
 // This is the service worker with the combined offline experience (Offline page + Offline copy of pages)
 
-const CACHE = "pwabuilder-offline-page";
+const CACHE = "pwa";
 
 const PRECACHE_ASSETS = [
   "/",
@@ -24,13 +24,27 @@ const PRECACHE_ASSETS = [
   "/js/redactor-osticket.js",
   "/js/select2.min.js",
   "/pwa/offline.html",
-  "/pwa/manifest.json"
-]
+  "/pwa/manifest.json",
+];
 
-importScripts('https://storage.googleapis.com/workbox-cdn/releases/5.1.2/workbox-sw.js');
+importScripts(
+  "https://storage.googleapis.com/workbox-cdn/releases/5.1.2/workbox-sw.js"
+);
+self.importScripts("/localforage-1.10.0.min.js");
 
 // TODO: replace the following with the correct offline fallback page i.e.: const offlineFallbackPage = "offline.html";
 const offlineFallbackPage = "offline.html";
+
+if (workbox.navigationPreload.isSupported()) {
+  workbox.navigationPreload.enable();
+}
+
+workbox.routing.registerRoute(
+  new RegExp("/*"),
+  new workbox.strategies.StaleWhileRevalidate({
+    cacheName: CACHE,
+  })
+);
 
 self.addEventListener("message", (event) => {
   if (event.data && event.data.type === "SKIP_WAITING") {
@@ -38,46 +52,126 @@ self.addEventListener("message", (event) => {
   }
 });
 
-self.addEventListener('install', async (event) => {
+self.addEventListener("install", async (event) => {
   event.waitUntil(
-      //caches.open(CACHE)
-      //.then((cache) => cache.add(offlineFallbackPage))
-      caches.open(CACHE)
-      .then((cache) => cache.addAll(PRECACHE_ASSETS))
+    //caches.open(CACHE)
+    //.then((cache) => cache.add(offlineFallbackPage))
+    caches.open(CACHE).then((cache) => cache.addAll(PRECACHE_ASSETS))
   );
-  
-
 });
 
-if (workbox.navigationPreload.isSupported()) {
-  workbox.navigationPreload.enable();
-}
+self.addEventListener('activate', function (event) {
+  console.log('Claiming control');
+  return self.clients.claim();
+});
 
-workbox.routing.registerRoute(
-  new RegExp('/*'),
-  new workbox.strategies.StaleWhileRevalidate({
-    cacheName: CACHE
-  })
-);
 
-self.addEventListener('fetch', (event) => {
-  if (event.request.mode === 'navigate') {
-    event.respondWith((async () => {
-      try {
-        const preloadResp = await event.preloadResponse;
+self.addEventListener("fetch", (event) => {
+  console.log(event);
+  /* if (event.request.mode === "navigate") {
+    event.respondWith(
+      (async () => {
+        try {
+          const preloadResp = await event.preloadResponse;
 
-        if (preloadResp) {
-          return preloadResp;
+          if (preloadResp) {
+            return preloadResp;
+          }
+
+          const networkResp = await fetch(event.request);
+          return networkResp;
+        } catch (error) {
+          const cache = await caches.open(CACHE);
+          const cachedResp = await cache.match(offlineFallbackPage);
+          return cachedResp;
         }
-
-        const networkResp = await fetch(event.request);
-        return networkResp;
-      } catch (error) {
-
-        const cache = await caches.open(CACHE);
-        const cachedResp = await cache.match(offlineFallbackPage);
-        return cachedResp;
-      }
-    })());
-  }
+      })()
+    );
+  } */
 });
+
+// Network is back up, we're being awaken, let's do the requests we were trying to do before if any.
+self.addEventListener("sync", (event) => {
+  console.log(event);
+
+  // Check if we had a movie search query to do.
+  /* if (event.tag === BACKGROUND_SEARCH_QUERY_TAG) {
+    event.waitUntil(
+      (async () => {
+        // Get the query we were trying to do before.
+        const query = await localforage.getItem(BACKGROUND_SEARCH_QUERY_TAG);
+        if (!query) {
+          return;
+        }
+        await localforage.removeItem(BACKGROUND_SEARCH_QUERY_TAG);
+
+        const response = await searchForMovies(query, true);
+        const data = await response.json();
+
+        // Store the results for the next time the user opens the app. The frontend will use it to
+        // populate the page.
+        await localforage.setItem(NEXT_LAUNCH_QUERY_RESULTS_TAG, data.Search);
+
+        // Let the user know, if they granted permissions before.
+        self.registration.showNotification(
+          `Your search for "${query}" is now ready`,
+          {
+            icon: "/favicon.svg",
+            body: "You can access the list of movies in the app",
+            actions: [
+              {
+                action: "view-results",
+                title: "Open app",
+              },
+            ],
+          }
+        );
+      })()
+    );
+  } */
+
+  // Check if we had a movie details request to do.
+  /* if (event.tag === BACKGROUND_MOVIE_DETAILS_TAG) {
+    event.waitUntil(
+      (async () => {
+        // Get the id we were trying to get details about before.
+        const id = await localforage.getItem(BACKGROUND_MOVIE_DETAILS_TAG);
+        if (!id) {
+          return;
+        }
+        await localforage.removeItem(BACKGROUND_MOVIE_DETAILS_TAG);
+
+        const response = await getMovieDetails(id, true);
+        const data = await response.json();
+
+        // Store the results for the next time the user opens the app. The frontend will use it to
+        // populate the details section.
+        await localforage.setItem(NEXT_LAUNCH_MOVIE_DETAILS_TAG, data);
+
+        // Let the user know, if they granted permissions before.
+        self.registration.showNotification(`Movie details are now ready`, {
+          icon: "/favicon.svg",
+          body: "You can access the details in the app",
+          actions: [
+            {
+              action: "view-details",
+              title: "Open app",
+            },
+          ],
+        });
+      })()
+    );
+  } */
+});
+
+
+function requestBackgroundSyncForMovieDetails(id) {
+  if (!self.registration.sync) {
+      return;
+  }
+
+  // We're offline. register a Background Sync to do the query again later when online.
+  self.registration.sync.register(BACKGROUND_MOVIE_DETAILS_TAG);
+  // Remember the id so we can do it later.
+  localforage.setItem(BACKGROUND_MOVIE_DETAILS_TAG, id);
+}

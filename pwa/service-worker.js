@@ -1,8 +1,9 @@
 let url = "/";
+const CACHE = 'pwa';
 
 self.addEventListener("install", function(event) {
 	event.waitUntil(
-		caches.open("pwa").then(function(cache) {
+		caches.open(CACHE).then(function(cache) {
 			console.log(cache);
 			return cache.addAll([
 				url,
@@ -38,7 +39,7 @@ self.addEventListener("install", function(event) {
 
 self.addEventListener("fetch", function(event) {
 	event.respondWith(
-		caches.open("pwa").then(function(cache) {
+		caches.open(CACHE).then(function(cache) {
 			return cache.match(event.request).then(function(response) {
 				console.log(event.request.url);
 				cache.addAll([event.request.url]);
@@ -52,3 +53,5 @@ self.addEventListener("fetch", function(event) {
 		})
 	);
 });
+
+

@@ -84,7 +84,7 @@ function startPwa(firstStart) {
 } */
 
 function cacheLinks() {
-	caches.open("pwabuilder-offline-page").then(function(cache) {
+	caches.open("pwa").then(function(cache) {
 		const linksFound = [];
 		document.querySelectorAll("a").forEach(function(a) {
 			linksFound.push(a.href);
