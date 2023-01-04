@@ -198,9 +198,9 @@ self.addEventListener("sync", (event) => {
 });
 
 
-window.addEventListener("online",  function(){
+self.addEventListener("online",  function(){
   console.log("You are online!");
 });
-window.addEventListener("offline", function(){
+self.addEventListener("offline", function(){
   console.log("Oh no, you lost your network connection.");
 });
