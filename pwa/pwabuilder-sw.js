@@ -44,8 +44,13 @@ const offlineFallbackPage = "offline.html";
 
 
 self.addEventListener("message", (event) => {
+  console.log(event.data.type);
   if (event.data && event.data.type === "SKIP_WAITING") {
     self.skipWaiting();
+  }
+
+  if (event.data && event.data.type === 'IS_OFFLINE') {
+    alert(event);
   }
 });
 
@@ -73,8 +78,23 @@ self.addEventListener('activate', function (event) {
   return self.clients.claim();
 });
 
+self.addEventListener('fetch', event => {
+  event.respondWith((async () => {
+      const cache = await caches.open(CACHE);
+      // Try the cache first.
+      const cachedResponse = await cache.match(event.request);
+      if (cachedResponse !== undefined) {
+          // Cache hit, let's send the cached resource.
+          return cachedResponse;
+      } else {
+          // Nothing in cache, let's go to the network.
 
-self.addEventListener("fetch", (event) => {
+          // ...... truncated ....
+      }
+  }))
+});
+
+/* self.addEventListener("fetch", (event) => {
   console.log(event);
   document.getElementById("text_pwa").innerHTML = event;
   
@@ -98,6 +118,11 @@ self.addEventListener("fetch", (event) => {
       })()
     );
   }
+}); */
+
+navigator.serviceWorker.controller.postMessage({ 
+  type: `IS_OFFLINE`
+  // add more properties if needed
 });
 
 // Network is back up, we're being awaken, let's do the requests we were trying to do before if any.
@@ -176,13 +201,9 @@ self.addEventListener("sync", (event) => {
 });
 
 
-function requestBackgroundSyncForMovieDetails(id) {
-  if (!self.registration.sync) {
-      return;
-  }
-
-  // We're offline. register a Background Sync to do the query again later when online.
-  self.registration.sync.register(BACKGROUND_MOVIE_DETAILS_TAG);
-  // Remember the id so we can do it later.
-  localforage.setItem(BACKGROUND_MOVIE_DETAILS_TAG, id);
-}
+window.addEventListener("online",  function(){
+  console.log("You are online!");
+});
+window.addEventListener("offline", function(){
+  console.log("Oh no, you lost your network connection.");
+});
