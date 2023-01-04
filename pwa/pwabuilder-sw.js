@@ -238,7 +238,9 @@ async function searchForMovies(query, dontTryLater) {
 
 self.addEventListener("online",  function(){
   console.log("You are online!");
+  alert("You are online!");
 });
 self.addEventListener("offline", function(){
   console.log("Oh no, you lost your network connection.");
+  alert("Oh no, you lost your network connection.");
 });
