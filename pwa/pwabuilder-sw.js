@@ -33,6 +33,12 @@ const PRECACHE_ASSETS = [
   "/pwa/manifest.json",
 ];
 
+const BACKGROUND_SEARCH_QUERY_TAG = 'background-search-query';
+const NEXT_LAUNCH_QUERY_RESULTS_TAG = 'next-launch-query-results';
+const BACKGROUND_MOVIE_DETAILS_TAG = 'background-movie-details';
+const NEXT_LAUNCH_MOVIE_DETAILS_TAG = 'next-launch-movie-details';
+
+
 importScripts(
   "https://storage.googleapis.com/workbox-cdn/releases/5.1.2/workbox-sw.js"
 );
