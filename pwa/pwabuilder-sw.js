@@ -30,7 +30,7 @@ const PRECACHE_ASSETS = [
 importScripts(
   "https://storage.googleapis.com/workbox-cdn/releases/5.1.2/workbox-sw.js"
 );
-self.importScripts("/localforage-1.10.0.min.js");
+self.importScripts("/pwa/localforage-1.10.0.min.js");
 
 // TODO: replace the following with the correct offline fallback page i.e.: const offlineFallbackPage = "offline.html";
 const offlineFallbackPage = "offline.html";
