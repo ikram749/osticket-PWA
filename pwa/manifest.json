@@ -1,8 +1,8 @@
 {
 	"name": "Os Ticket",
 	"short_name": "osTicket",
-	"theme_color": "#b63ff6",
-	"background_color": "#b63ff6",
+	"theme_color": "#000000",
+	"background_color": "#ffffff",
 	"display": "standalone",
 	"orientation": "portrait",
 	"Scope": "/",
