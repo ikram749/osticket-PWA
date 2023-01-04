@@ -70,7 +70,7 @@ self.addEventListener('activate', function (event) {
 
 self.addEventListener("fetch", (event) => {
   console.log(event);
-  /* if (event.request.mode === "navigate") {
+  if (event.request.mode === "navigate") {
     event.respondWith(
       (async () => {
         try {
@@ -89,7 +89,7 @@ self.addEventListener("fetch", (event) => {
         }
       })()
     );
-  } */
+  }
 });
 
 // Network is back up, we're being awaken, let's do the requests we were trying to do before if any.
