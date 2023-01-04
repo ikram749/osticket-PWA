@@ -141,7 +141,7 @@ async function sendFormData() {
   const data = await getFormDataFromIndexedDB();
 
   // Send form data to server
-  const response = await fetch("/submit-form", {
+  const response = await fetch("/open.php", {
     method: "POST",
     body: data,
   });
@@ -166,12 +166,12 @@ async function sendFormData() {
 
 function getFormDataFromIndexedDB() {
   return new Promise((resolve, reject) => {
-    const request = indexedDB.open("form-data", 1);
+    const request = indexedDB.open("form-open-ticket-data", 1);
     request.onerror = reject;
     request.onsuccess = (event) => {
       const db = event.target.result;
-      const transaction = db.transaction(["form-data"], "readonly");
-      const store = transaction.objectStore("form-data");
+      const transaction = db.transaction(["form-open-ticket-data"], "readonly");
+      const store = transaction.objectStore("form-open-ticket-data");
       const data = store.getAll();
       data.onsuccess = () => resolve(data.result);
     };
@@ -180,12 +180,12 @@ function getFormDataFromIndexedDB() {
 
 function storeFormDataInIndexedDB(formData) {
   return new Promise((resolve, reject) => {
-    const request = indexedDB.open("form-data", 1);
+    const request = indexedDB.open("form-open-ticket-data", 1);
     request.onerror = reject;
     request.onsuccess = (event) => {
       const db = event.target.result;
-      const transaction = db.transaction(["form-data"], "readwrite");
-      const store = transaction.objectStore("form-data");
+      const transaction = db.transaction(["form-open-ticket-data"], "readwrite");
+      const store = transaction.objectStore("form-open-ticket-data");
       store.add({ formData });
       resolve();
     };
@@ -194,12 +194,12 @@ function storeFormDataInIndexedDB(formData) {
 
 function deleteFormDataFromIndexedDB() {
   return new Promise((resolve, reject) => {
-    const request = indexedDB.open("form-data", 1);
+    const request = indexedDB.open("form-open-ticket-data", 1);
     request.onerror = reject;
     request.onsuccess = (event) => {
       const db = event.target.result;
-      const transaction = db.transaction(["form-data"], "readwrite");
-      const store = transaction.objectStore("form-data");
+      const transaction = db.transaction(["form-open-ticket-data"], "readwrite");
+      const store = transaction.objectStore("form-open-ticket-data");
       store.clear();
       resolve();
     };
