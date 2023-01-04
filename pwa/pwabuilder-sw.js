@@ -125,7 +125,7 @@ self.addEventListener('fetch', event => {
 // Network is back up, we're being awaken, let's do the requests we were trying to do before if any.
 self.addEventListener("sync", (event) => {
   console.log(event);
-  document.getElementById("text_pwa1").innerHTML = event;
+  //document.getElementById("text_pwa1").innerHTML = event;
   
   // Check if we had a movie search query to do.
   /* if (event.tag === BACKGROUND_SEARCH_QUERY_TAG) {
