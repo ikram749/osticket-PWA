@@ -25,6 +25,8 @@ const PRECACHE_ASSETS = [
   "/js/select2.min.js",
   "/pwa/offline.html",
   "/pwa/manifest.json",
+  "/view.php",
+  "/open.php"
 ];
 
 importScripts(
