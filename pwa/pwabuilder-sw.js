@@ -50,7 +50,7 @@ const offlineFallbackPage = "offline.html";
 
 
 self.addEventListener("message", (event) => {
-  console.log(event.data.type);
+  alert(event.data.alert);
   if (event.data && event.data.type === "SKIP_WAITING") {
     self.skipWaiting();
   }
