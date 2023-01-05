@@ -50,8 +50,8 @@ send_form.addEventListener("click", function () {
     let request = objectStore.getAll();
 
     request.onsuccess = function (event) {
-      let formData = event.target.result;
-
+      //let formData = event.target.result;
+      let formData = $("#ticketForm").serialize();
       // Submit the form data to the server
       /* fetch("/open.php", {
         headers: {
