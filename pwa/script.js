@@ -75,6 +75,7 @@ send_form.addEventListener("click", function () {
         $.ajax({
           type: 'POST',
           url: '/api/tickets.json',
+          headers: {"X-API-Key":'647A30264EC76F864FE6DA955A686267'},
           data: formData,
           success: function(response) {
             console.log(response);
