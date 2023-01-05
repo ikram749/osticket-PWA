@@ -97,6 +97,7 @@ if (osTicket::is_ie())
 </div>
 <button id="install">Install this app</button>
 <button id="remove">reset</button>
+<button id="insert_form">insert_form</button>
 <p id="text_pwa">Before you enable the PWA, check out how slow this website is.</p>
     <p id="text_pwa1"></p>
 
