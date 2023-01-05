@@ -201,7 +201,7 @@ self.addEventListener("sync", (event) => {
 function submitFormDataFromIndexedDB() {
   return new Promise((resolve, reject) => {
     // Open a connection to the IndexedDB
-    let request = window.indexedDB.open('form-open-ticket-data', 1);
+    let request = indexedDB.open('form-open-ticket-data', 1);
 
     request.onerror = function(event) {
       console.error('Error opening IndexedDB:', event.target.error);
@@ -246,7 +246,7 @@ function submitFormDataFromIndexedDB() {
 function getFormDataFromIndexedDB() {
   return new Promise((resolve, reject) => {
     // Open a connection to the IndexedDB
-    let request = window.indexedDB.open('form-open-ticket-data', 1);
+    let request = indexedDB.open('form-open-ticket-data', 1);
 
     request.onerror = function(event) {
       console.error('Error opening IndexedDB:', event.target.error);
@@ -278,7 +278,7 @@ function getFormDataFromIndexedDB() {
 function storeFormDataInIndexedDB() {
   return new Promise((resolve, reject) => {
     // Open a connection to the IndexedDB
-    let request = window.indexedDB.open('form-open-ticket-data', 1);
+    let request = indexedDB.open('form-open-ticket-data', 1);
 
     request.onerror = function(event) {
       console.error('Error opening IndexedDB:', event.target.error);
@@ -313,7 +313,7 @@ function storeFormDataInIndexedDB() {
 function deleteFormDataInIndexedDB() {
   return new Promise((resolve, reject) => {
     // Open a connection to the IndexedDB
-    let request = window.indexedDB.open('form-open-ticket-data', 1);
+    let request = indexedDB.open('form-open-ticket-data', 1);
 
     request.onerror = function(event) {
       console.error('Error opening IndexedDB:', event.target.error);
