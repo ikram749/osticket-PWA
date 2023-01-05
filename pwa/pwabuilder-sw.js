@@ -85,6 +85,18 @@ self.addEventListener("activate", (event) => {
       await clients.claim();
     })()
   );
+
+  let request = self.indexedDB.open('form-data', 1);
+
+  request.onupgradeneeded = function(event) {
+    let db = event.target.result;
+
+    // Create an object store called 'form-data'
+    let objectStore = db.createObjectStore('form-data', {
+      autoIncrement: true
+    });
+  };
+
 });
 
 self.addEventListener("fetch", (event) => {
@@ -102,7 +114,7 @@ self.addEventListener("fetch", (event) => {
     }
   });
 
-  if (event.request.method === 'POST' && event.request.url === '/open.php') {
+ if (event.request.method === 'POST' && event.request.url === '/submit-form') {
     event.respondWith(
       new Response(null, {
         status: 200
@@ -111,8 +123,28 @@ self.addEventListener("fetch", (event) => {
 
     event.waitUntil(
       event.request.formData().then(formData => {
-        console.log(formData);
-        // Output: { first-name: 'John', last-name: 'Doe' }
+        let request = self.indexedDB.open('form-data', 1);
+
+        request.onsuccess = function(event) {
+          let db = event.target.result;
+
+          // Store the form data in the 'form-data' object store
+          let transaction = db.transaction(['form-data'], 'readwrite');
+          let objectStore = transaction.objectStore('form-data');
+          let addRequest = objectStore.add(formData);
+
+          addRequest.onsuccess = function(event) {
+            console.log('Form data added to IndexedDB');
+          };
+
+          addRequest.onerror = function(event) {
+            console.error('Error adding form data to IndexedDB:', event.target.error);
+          };
+        };
+
+        request.onerror = function(event) {
+          console.error('Error opening IndexedDB:', event.target.error);
+        };
       })
     );
   }
