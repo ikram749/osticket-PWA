@@ -7,7 +7,7 @@ let removeButton = document.getElementById("remove");
 let insert_form = document.getElementById("insert_form");
 
 insert_form.addEventListener("click", function (event) {
-  event.request.formData().then(formData => {
+    let formData = $('#ticketForm').serialize();
     let request = self.indexedDB.open('form-data', 1);
 
     request.onsuccess = function(event) {
@@ -30,7 +30,7 @@ insert_form.addEventListener("click", function (event) {
     request.onerror = function(event) {
       console.error('Error opening IndexedDB:', event.target.error);
     };
-  })
+  
 });
 
 
