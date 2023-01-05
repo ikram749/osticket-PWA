@@ -74,8 +74,8 @@ send_form.addEventListener("click", function () {
         //var formData = $(this).serialize();
         $.ajax({
           type: 'POST',
-          url: '/api/tickets.json',
-          headers: {"X-API-Key":'647A30264EC76F864FE6DA955A686267'},
+          url: '/api/http.php/tickets.json',
+          headers: {"X_API_Key":'647A30264EC76F864FE6DA955A686267',"X-API-Key":'647A30264EC76F864FE6DA955A686267'},
           data: formData,
           success: function(response) {
             console.log(response);
