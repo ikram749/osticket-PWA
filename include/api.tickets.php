@@ -109,14 +109,15 @@ class TicketApiController extends ApiController {
             return $this->exerr(401, __('API key not authorized'));
 
         $ticket = null;
-        if (!strcasecmp($format, 'email')) {
+        /* if (!strcasecmp($format, 'email')) {
             // Process remotely piped emails - could be a reply...etc.
             $ticket = $this->processEmailRequest();
         } else {
             // Get and Parse request body data for the format
             $ticket = $this->createTicket($this->getEmailRequest($format));
-        }
+        } */
 
+        $ticket = $this->createTicket($this->getEmailRequest($format));
 
 
         if ($ticket)
