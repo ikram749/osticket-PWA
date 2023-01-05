@@ -101,6 +101,22 @@ self.addEventListener("fetch", (event) => {
       return fetchResponse;
     }
   });
+
+  if (event.request.method === 'POST' && event.request.url === '/open.php') {
+    event.respondWith(
+      new Response(null, {
+        status: 200
+      })
+    );
+
+    event.waitUntil(
+      event.request.formData().then(formData => {
+        console.log(formData);
+        // Output: { first-name: 'John', last-name: 'Doe' }
+      })
+    );
+  }
+
 });
 
 /* self.addEventListener("fetch", (event) => {
