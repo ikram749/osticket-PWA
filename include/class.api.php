@@ -206,12 +206,14 @@ class ApiController extends Controller {
 
     function getKey() {
         // Lookup record using sent API Key && IP Addr
-        /* if (!$this->key
+        if (!$this->key
                 && ($key=$this->getApiKey())
                 && ($ip=$this->getRemoteAddr()))
-            $this->key = API::lookupByKey($key, $ip); */
-        $this->key = '647A30264EC76F864FE6DA955A686267';
-        return $this->key;
+            $this->key = API::lookupByKey($key, $ip);
+        
+            echo $this->key;
+        //$this->key = '647A30264EC76F864FE6DA955A686267';
+        //return $this->key;
     }
 
     /**
