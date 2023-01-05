@@ -293,8 +293,12 @@ function storeFormDataInIndexedDB() {
       let formData = event.formData;
 
       // Store the form data in the IndexedDB
-      let transaction = db.transaction(['form-open-ticket-data'], 'readwrite');
-      let objectStore = transaction.objectStore('form-open-ticket-data');
+      //let transaction = db.transaction(['form-open-ticket-data'], 'readwrite');
+      //let objectStore = transaction.objectStore('form-open-ticket-data');
+      let objectStore = db.createObjectStore('form-open-ticket-data', {
+        autoIncrement: true
+      });
+
       let request = objectStore.add(formData);
 
       request.onsuccess = function(event) {
