@@ -170,6 +170,7 @@ function getFormDataFromIndexedDB() {
     request.onerror = reject;
     request.onsuccess = (event) => {
       const db = event.target.result;
+      console.log(event);
       const transaction = db.transaction(["form-open-ticket-data"], "readonly");
       const store = transaction.objectStore("form-open-ticket-data");
       const data = store.getAll();
