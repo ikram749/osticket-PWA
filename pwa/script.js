@@ -8,7 +8,7 @@ let send_form = document.getElementById("send_form");
 
 insert_form.addEventListener("click", function (event) {
     let formData = $('#ticketForm').serialize();
-    let request = self.indexedDB.open('form-data', 1);
+    let request = window.indexedDB.open('form-data', 1);
 
     request.onsuccess = function(event) {
       let db = event.target.result;
@@ -34,7 +34,7 @@ insert_form.addEventListener("click", function (event) {
 
 send_form.addEventListener("click", function () {
  // Open a connection to the IndexedDB
- let request = self.indexedDB.open('form-open-ticket-data', 1);
+ let request = window.indexedDB.open('form-data', 1);
 
  request.onerror = function(event) {
    console.error('Error opening IndexedDB:', event.target.error);
