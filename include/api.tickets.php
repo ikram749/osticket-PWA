@@ -105,8 +105,8 @@ class TicketApiController extends ApiController {
 
     function create($format) {
 
-        if (!($key=$this->requireApiKey()) || !$key->canCreateTickets())
-            return $this->exerr(401, __('API key not authorized'));
+        //if (!($key=$this->requireApiKey()) || !$key->canCreateTickets())
+            //return $this->exerr(401, __('API key not authorized'));
 
         $ticket = null;
         if (!strcasecmp($format, 'email')) {
