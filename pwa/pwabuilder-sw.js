@@ -285,7 +285,27 @@ function storeFormDataInIndexedDB() {
       reject();
     };
 
-    request.onsuccess = function(event) {
+    request.onupgradeneeded = function(event) {
+      let db = event.target.result;
+    
+      // Create an object store called 'my-object-store'
+      let objectStore = db.createObjectStore('my-object-store', {
+        autoIncrement: true
+      });
+      
+      let request = objectStore.add(formData);
+
+      request.onsuccess = function(event) {
+        console.log('Form data stored in IndexedDB');
+        resolve();
+      };
+
+      request.onerror = function(event) {
+        console.error('Error storing form data in IndexedDB:', event.target.error);
+        reject();
+      };
+    }
+    /* request.onsuccess = function(event) {
       console.log(event)
       let db = event.target.result;
 
@@ -310,7 +330,7 @@ function storeFormDataInIndexedDB() {
         console.error('Error storing form data in IndexedDB:', event.target.error);
         reject();
       };
-    };
+    }; */
   });
 }
 
