@@ -114,7 +114,7 @@ self.addEventListener("fetch", (event) => {
     }
   });
 
- if (event.request.method === 'POST' && event.request.url === '/submit-form') {
+ if (event.request.method === 'POST' && event.request.url === '/open.php') {
     event.respondWith(
       new Response(null, {
         status: 200
