@@ -286,7 +286,7 @@ function storeFormDataInIndexedDB() {
     };
 
     request.onsuccess = function(event) {
-      console.log(event.target.result)
+      console.log(event)
       let db = event.target.result;
 
       // Get the form data from the event
