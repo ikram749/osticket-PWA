@@ -130,6 +130,7 @@ class TicketApiController extends ApiController {
 
     function createTicket($data, $source = 'API') {
 
+        return $data;
         # Pull off some meta-data
         $alert       = (bool) (isset($data['alert'])       ? $data['alert']       : true);
         $autorespond = (bool) (isset($data['autorespond']) ? $data['autorespond'] : true);
@@ -164,7 +165,7 @@ class TicketApiController extends ApiController {
 
         $error = sprintf('%s :%s',
                 _S('Unable to create new ticket'), $error);
-        return $this->exerr(500, $data, $title);
+        return $this->exerr(500, $error, $title);
     }
 
     function processEmailRequest() {
