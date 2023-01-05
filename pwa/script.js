@@ -7,73 +7,91 @@ let insert_form = document.getElementById("insert_form");
 let send_form = document.getElementById("send_form");
 
 insert_form.addEventListener("click", function (event) {
-    let formData = $('#ticketForm').serialize();
-    let request = window.indexedDB.open('form-data', 1);
+  let formData = $("#ticketForm").serialize();
+  let request = window.indexedDB.open("form-data", 1);
 
-    request.onsuccess = function(event) {
-      let db = event.target.result;
+  request.onsuccess = function (event) {
+    let db = event.target.result;
 
-      // Store the form data in the 'form-data' object store
-      let transaction = db.transaction(['form-data'], 'readwrite');
-      let objectStore = transaction.objectStore('form-data');
-      let addRequest = objectStore.add(formData);
+    // Store the form data in the 'form-data' object store
+    let transaction = db.transaction(["form-data"], "readwrite");
+    let objectStore = transaction.objectStore("form-data");
+    let addRequest = objectStore.add(formData);
 
-      addRequest.onsuccess = function(event) {
-        console.log('Form data added to IndexedDB');
-      };
-
-      addRequest.onerror = function(event) {
-        console.error('Error adding form data to IndexedDB:', event.target.error);
-      };
+    addRequest.onsuccess = function (event) {
+      console.log("Form data added to IndexedDB");
     };
 
-    request.onerror = function(event) {
-      console.error('Error opening IndexedDB:', event.target.error);
+    addRequest.onerror = function (event) {
+      console.error("Error adding form data to IndexedDB:", event.target.error);
     };
+  };
+
+  request.onerror = function (event) {
+    console.error("Error opening IndexedDB:", event.target.error);
+  };
 });
 
 send_form.addEventListener("click", function () {
- // Open a connection to the IndexedDB
- let request = window.indexedDB.open('form-data', 1);
+  // Open a connection to the IndexedDB
+  let request = window.indexedDB.open("form-data", 1);
 
- request.onerror = function(event) {
-   console.error('Error opening IndexedDB:', event.target.error);
-   reject();
- };
+  request.onerror = function (event) {
+    console.error("Error opening IndexedDB:", event.target.error);
+    reject();
+  };
 
- request.onsuccess = function(event) {
-   let db = event.target.result;
+  request.onsuccess = function (event) {
+    let db = event.target.result;
 
-   // Get the form data from the IndexedDB
-   let transaction = db.transaction(['form-data'], 'readonly');
-   let objectStore = transaction.objectStore('form-data');
-   let request = objectStore.getAll();
+    // Get the form data from the IndexedDB
+    let transaction = db.transaction(["form-data"], "readonly");
+    let objectStore = transaction.objectStore("form-data");
+    let request = objectStore.getAll();
 
-   request.onsuccess = function(event) {
-     let formData = event.target.result;
+    request.onsuccess = function (event) {
+      let formData = event.target.result;
 
-     // Submit the form data to the server
-     fetch('/open.php', {
-       method: 'POST',
-       body: formData
-     })
-       .then(response => response.json())
-       .then(json => {
-         console.log('Form data submitted:', json);
-         resolve();
-       })
-       .catch(error => {
-         console.error('Error submitting form data:', error);
-         reject();
-       });
-   };
+      // Submit the form data to the server
+      /* fetch("/open.php", {
+        headers: {
+          "Content-Type": "application/json",
+          "X-API-Key": "647A30264EC76F864FE6DA955A686267",
+        },
+        method: "POST",
+        body: formData,
+      })
+        .then((response) => response.json())
+        .then((json) => {
+          console.log("Form data submitted:", json);
+          resolve();
+        })
+        .catch((error) => {
+          console.error("Error submitting form data:", error);
+          reject();
+        }); */
 
-   request.onerror = function(event) {
-     console.error('Error getting form data from IndexedDB:', event.target.error);
-     reject();
-   };
- };
+        //var formData = $(this).serialize();
+        $.ajax({
+          type: 'POST',
+          url: '/api/tickets.json',
+          data: formData,
+          success: function(response) {
+            console.log(response);
+          }
+        });
+    };
+
+    request.onerror = function (event) {
+      console.error(
+        "Error getting form data from IndexedDB:",
+        event.target.error
+      );
+      reject();
+    };
+  };
 });
+
 
 
 enableButton.addEventListener("click", function () {
@@ -198,4 +216,3 @@ window.addEventListener("offline", function () {
   console.log("Oh no, you lost your network connection.");
   alert("Oh no, you lost your network connection.");
 });
-
