@@ -201,7 +201,7 @@ function submitFormDataFromIndexedDB() {
 }
 function submitFormDataFromIndexedDBTest() {
   return new Promise((resolve, reject) => {
-    const request = indexedDB.open('form-data');
+    let request = self.indexedDB.open('form-data', 1);
     request.onsuccess = function() {
       const db = request.result;
       const store = db.transaction('form-data').objectStore('form-data');
@@ -217,6 +217,10 @@ function submitFormDataFromIndexedDBTest() {
           });
         }
       };
+    };
+    request.onerror = function(event) {
+      console.error('Error getting form data from IndexedDB:', event.target.error);
+      reject();
     };
   });
 }
