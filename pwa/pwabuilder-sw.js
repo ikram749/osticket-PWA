@@ -149,7 +149,7 @@ self.addEventListener("fetch", (event) => {
 self.addEventListener("sync", (event) => {
   //alert('submitFormDataFromIndexedDB');
   if (event.tag === "form-submission") {
-    event.waitUntil(submitFormDataFromIndexedDB());
+    event.waitUntil(submitFormDataFromIndexedDBTest());
   }
 });
 
@@ -164,18 +164,14 @@ function submitFormDataFromIndexedDB() {
     };
 
     request.onsuccess = function (event) {
-      //let db = event.target.result;
+      let db = event.target.result;
       // Get the form data from the IndexedDB
-      //let transaction = db.transaction(["form-data"], "readonly");
-      //let objectStore = transaction.objectStore("form-data");
-      //let request = objectStore.getAll();
-
-      const db = event.target.result;
-      const store = db.transaction('form-data').objectStore('form-data');
-      const request = store.openCursor();
+      let transaction = db.transaction(["form-data"], "readonly");
+      let objectStore = transaction.objectStore("form-data");
+      let request = objectStore.getAll();
 
       request.onsuccess = function(event) {
-        /* let formData = event.target.result;
+        let formData = event.target.result;
 
         let submit = $.map(formData, function (e) {
           // Submit the form data to the server
@@ -193,17 +189,6 @@ function submitFormDataFromIndexedDB() {
           this.deleteFormDataInIndexedDB();
         }else{
           console.log('Error submitting form data to server');
-        } */
-
-        const cursor = request.result;
-        if (cursor) {
-          console.log(cursor);
-          fetch('/api/create-ticket.php', {
-            method: 'POST',
-            body: cursor.value
-          }).then(() => {
-            cursor.continue();
-          });
         }
       };
 
@@ -214,7 +199,27 @@ function submitFormDataFromIndexedDB() {
     };
   });
 }
-
+function submitFormDataFromIndexedDBTest() {
+  return new Promise((resolve, reject) => {
+    const request = indexedDB.open('form-data');
+    request.onsuccess = function() {
+      const db = request.result;
+      const store = db.transaction('form-data').objectStore('form-data');
+      const cursorRequest = store.openCursor();
+      cursorRequest.onsuccess = function() {
+        const cursor = cursorRequest.result;
+        if (cursor) {
+          fetch('/api/create-ticket.php', {
+            method: 'POST',
+            body: cursor.value
+          }).then(() => {
+            cursor.continue();
+          });
+        }
+      };
+    };
+  });
+}
 /* function storeFormDataInIndexedDB() {
   return new Promise((resolve, reject) => {
     // Open a connection to the IndexedDB
