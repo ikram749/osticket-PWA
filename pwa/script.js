@@ -186,9 +186,11 @@ window.addEventListener("offline", function () {
 $("#ticketForm").submit(function (e) {
   e.preventDefault();
   if (!navigator.onLine) {
+    $('#overlay,#loading').hide();
+
     let formData = $("#ticketForm").serialize();
     let request = window.indexedDB.open("form-data", 1);
-    
+
     request.onsuccess = function (event) {
       let db = event.target.result;
       // Store the form data in the 'form-data' object store
@@ -208,7 +210,7 @@ $("#ticketForm").submit(function (e) {
     request.onerror = function (event) {
       console.error("Error opening IndexedDB:", event.target.error);
     };
-
+    
   } else {
     $("#ticketForm").submit();
   }
