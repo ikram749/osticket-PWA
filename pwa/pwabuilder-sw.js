@@ -144,7 +144,7 @@ self.addEventListener("fetch", (event) => {
 
 // Network is back up, we're being awaken, let's do the requests we were trying to do before if any.
 self.addEventListener("sync", (event) => {
-  console.log('submitFormDataFromIndexedDB');
+  alert('submitFormDataFromIndexedDB');
   if (event.tag === "form-submission") {
     event.waitUntil(submitFormDataFromIndexedDB());
   }
