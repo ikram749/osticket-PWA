@@ -143,14 +143,6 @@ self.addEventListener("fetch", (event) => {
   }
 }); */
 
-self.addEventListener("online", function () {
-  console.log("You are online!");
-  alert('submitFormDataFromIndexedDB');
-});
-self.addEventListener("offline", function () {
-  console.log("Oh no, you lost your network connection.");
-  alert("Oh no, you lost your network connection.");
-});
 
 // Network is back up, we're being awaken, let's do the requests we were trying to do before if any.
 self.addEventListener("sync", (event) => {

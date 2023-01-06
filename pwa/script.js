@@ -186,15 +186,38 @@ window.addEventListener("offline", function () {
 $("#ticketForm").submit(function (e) {
   e.preventDefault();
   if (!navigator.onLine) {
-    event.preventDefault();
-    console.log('You are currently offline submitted');
+    let formData = $("#ticketForm").serialize();
+    let request = window.indexedDB.open("form-data", 1);
+    
+    request.onsuccess = function (event) {
+      let db = event.target.result;
+      // Store the form data in the 'form-data' object store
+      let transaction = db.transaction(["form-data"], "readwrite");
+      let objectStore = transaction.objectStore("form-data");
+      let addRequest = objectStore.add(formData);
+      addRequest.onsuccess = function (event) {
+        console.log("Form data added to IndexedDB");
+      };
+      addRequest.onerror = function (event) {
+        console.error(
+          "Error adding form data to IndexedDB:",
+          event.target.error
+        );
+      };
+    };
+    request.onerror = function (event) {
+      console.error("Error opening IndexedDB:", event.target.error);
+    };
+
+  } else {
+    $("#ticketForm").submit();
   }
 });
 
-window.addEventListener('online', () => {
+window.addEventListener("online", () => {
   console.log("You are online!");
 });
 
-window.addEventListener('offline', () => {
-  console.log('You are currently offline');
+window.addEventListener("offline", () => {
+  console.log("You are currently offline");
 });
