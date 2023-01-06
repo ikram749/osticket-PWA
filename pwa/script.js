@@ -5,6 +5,7 @@ let removeButton = document.getElementById("remove");
 
 let insert_form = document.getElementById("insert_form");
 let send_form = document.getElementById("send_form");
+const form = document.querySelector('ticketForm');
 
 insert_form.addEventListener("click", function (event) {
   let formData = $("#ticketForm").serialize();
@@ -200,7 +201,6 @@ window.addEventListener("offline", function () {
 });
  */
 
-const form = document.querySelector('ticketForm');
 
 form.addEventListener('submit', (event) => {
   if (!navigator.onLine) {
