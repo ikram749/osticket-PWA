@@ -186,7 +186,7 @@ window.addEventListener("offline", function () {
 $("#ticketForm").submit(function (e) {
   e.preventDefault();
   if (!navigator.onLine) {
-    $('#overlay,#loading').hide();
+    
 
     let formData = $("#ticketForm").serialize();
     let request = window.indexedDB.open("form-data", 1);
@@ -199,8 +199,10 @@ $("#ticketForm").submit(function (e) {
       let addRequest = objectStore.add(formData);
       addRequest.onsuccess = function (event) {
         console.log("Form data added to IndexedDB");
+        $('#overlay,#loading').hide();
       };
       addRequest.onerror = function (event) {
+        $('#overlay,#loading').hide();
         console.error(
           "Error adding form data to IndexedDB:",
           event.target.error
@@ -208,6 +210,7 @@ $("#ticketForm").submit(function (e) {
       };
     };
     request.onerror = function (event) {
+      $('#overlay,#loading').hide();
       console.error("Error opening IndexedDB:", event.target.error);
     };
     
