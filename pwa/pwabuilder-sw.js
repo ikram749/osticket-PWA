@@ -211,12 +211,15 @@ function submitFormDataFromIndexedDBTest() {
           console.log(cursor.value);
           fetch('/api/create-ticket.php', {
             method: 'POST',
+            headers: {  
+              "Content-type": "application/x-www-form-urlencoded; charset=UTF-8"  
+            }, 
             body: cursor.value
-          }).then((response) => {
-            console.log(response)
           })
+          .then(response => response.json())
+          .then(response => console.log(JSON.stringify(response)))
           .catch((error) => {
-            console.log(error)
+            console.log('Request failed', error);  
           });
           cursor.continue();
         }
