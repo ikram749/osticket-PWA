@@ -24,11 +24,12 @@ if ($_POST) {
     Draft::deleteForNamespace('ticket.client.'.substr(session_id(), -12));
     //Ticket::create...checks for errors..
     if(($ticket=Ticket::create($vars, $errors, SOURCE))){
-        $msg=__('Support ticket request created');
+        $msg='Support ticket request created';
     }else{
-        $msg=__('Unable to create a ticket');
+        $msg='Unable to create a ticket';
     }
-    return $msg;
+    //return $msg;
+    header('Content-type: application/json');
+    echo json_encode($msg);
 }
 ?>
-ok
