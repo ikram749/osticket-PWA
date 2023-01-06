@@ -168,10 +168,11 @@ function submitFormDataFromIndexedDB() {
       // Get the form data from the IndexedDB
       let transaction = db.transaction(["form-data"], "readonly");
       let objectStore = transaction.objectStore("form-data");
-      let request = objectStore.getAll();
+      //let request = objectStore.getAll();
+      const request = objectStore.openCursor();
 
       request.onsuccess = function(event) {
-        let formData = event.target.result;
+        /* let formData = event.target.result;
 
         let submit = $.map(formData, function (e) {
           // Submit the form data to the server
@@ -189,6 +190,16 @@ function submitFormDataFromIndexedDB() {
           this.deleteFormDataInIndexedDB();
         }else{
           console.log('Error submitting form data to server');
+        } */
+
+        const cursor = request.result;
+        if (cursor) {
+          fetch('/api/create-ticket.php', {
+            method: 'POST',
+            body: cursor.value
+          }).then(() => {
+            cursor.continue();
+          });
         }
       };
 
