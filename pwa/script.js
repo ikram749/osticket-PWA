@@ -173,15 +173,7 @@ function removestorage() {
   location.reload();
 }
 
-/* window.addEventListener("online", function () {
-  console.log("You are online!");
-  alert("You are online!");
-});
-window.addEventListener("offline", function () {
-  console.log("Oh no, you lost your network connection.");
-  alert("Oh no, you lost your network connection.");
-});
- */
+
 
 $("#ticketForm").submit(function (e) {
   e.preventDefault();
@@ -200,9 +192,11 @@ $("#ticketForm").submit(function (e) {
       addRequest.onsuccess = function (event) {
         console.log("Form data added to IndexedDB");
         $('#overlay,#loading').hide();
+        $('input[type="submit"]').prop('disabled', false);
       };
       addRequest.onerror = function (event) {
         $('#overlay,#loading').hide();
+        $('input[type="submit"]').prop('disabled', false);
         console.error(
           "Error adding form data to IndexedDB:",
           event.target.error
@@ -211,6 +205,7 @@ $("#ticketForm").submit(function (e) {
     };
     request.onerror = function (event) {
       $('#overlay,#loading').hide();
+      $('input[type="submit"]').prop('disabled', false);
       console.error("Error opening IndexedDB:", event.target.error);
     };
     
