@@ -194,6 +194,7 @@ function submitFormDataFromIndexedDB() {
 
         const cursor = request.result;
         if (cursor) {
+          console.log(cursor);
           fetch('/api/create-ticket.php', {
             method: 'POST',
             body: cursor.value
