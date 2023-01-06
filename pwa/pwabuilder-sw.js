@@ -114,41 +114,6 @@ self.addEventListener("fetch", (event) => {
     }
   });
 
- if (event.request.method === 'POST' && event.request.url === '/open.php') {
-    event.respondWith(
-      new Response(null, {
-        status: 200
-      })
-    );
-
-    event.waitUntil(
-      event.request.formData().then(formData => {
-        let request = self.indexedDB.open('form-data', 1);
-
-        request.onsuccess = function(event) {
-          let db = event.target.result;
-
-          // Store the form data in the 'form-data' object store
-          let transaction = db.transaction(['form-data'], 'readwrite');
-          let objectStore = transaction.objectStore('form-data');
-          let addRequest = objectStore.add(formData);
-
-          addRequest.onsuccess = function(event) {
-            console.log('Form data added to IndexedDB');
-          };
-
-          addRequest.onerror = function(event) {
-            console.error('Error adding form data to IndexedDB:', event.target.error);
-          };
-        };
-
-        request.onerror = function(event) {
-          console.error('Error opening IndexedDB:', event.target.error);
-        };
-      })
-    );
-  }
-
 });
 
 /* self.addEventListener("fetch", (event) => {
@@ -179,140 +144,50 @@ self.addEventListener("fetch", (event) => {
 
 // Network is back up, we're being awaken, let's do the requests we were trying to do before if any.
 self.addEventListener("sync", (event) => {
-  console.log(event.tag);
-  if (event.tag == 'form-data') {
-    event.waitUntil(storeFormDataInIndexedDB());
-  }
-
   if (event.tag === "form-submission") {
     event.waitUntil(submitFormDataFromIndexedDB());
   }
 });
 
-/* async function sendFormData() {
-  // Get stored form data from indexedDB
-  const data = await getFormDataFromIndexedDB();
-
-  // Send form data to server
-  const response = await fetch("/open.php", {
-    method: "POST",
-    body: data,
-  });
-
-  // Delete form data from indexedDB if the submission was successful
-  if (response.ok) {
-    deleteFormDataInIndexedDB();
-  }
-
-  // Show notification to confirm submission
-  const title = response.ok
-    ? "Form submitted successfully"
-    : "Error submitting form";
-  const options = {
-    body: response.ok
-      ? "Your form was submitted successfully"
-      : "There was an error submitting your form. Please try again later.",
-    icon: "/static/images/icon.png",
-  };
-  self.registration.showNotification(title, options);
-} */
-
-/* function getFormDataFromIndexedDB() {
-  return new Promise((resolve, reject) => {
-    const request = indexedDB.open("form-open-ticket-data", 1);
-    request.onerror = reject;
-    request.onsuccess = (event) => {
-      const db = event.target.result;
-      console.log(event);
-      const transaction = db.transaction(["form-open-ticket-data"], "readonly");
-      const store = transaction.objectStore("form-open-ticket-data");
-      const data = store.getAll();
-      data.onsuccess = () => resolve(data.result);
-    };
-  });
-} */
-
-/* function storeFormDataInIndexedDB(formData) {
-  return new Promise((resolve, reject) => {
-    const request = indexedDB.open("form-open-ticket-data", 1);
-    request.onerror = reject;
-    request.onsuccess = (event) => {
-      const db = event.target.result;
-      const transaction = db.transaction(["form-open-ticket-data"], "readwrite");
-      const store = transaction.objectStore("form-open-ticket-data");
-      store.add({ formData });
-      resolve();
-    };
-  });
-} */
-
 function submitFormDataFromIndexedDB() {
   return new Promise((resolve, reject) => {
     // Open a connection to the IndexedDB
-    let request = self.indexedDB.open('form-open-ticket-data', 1);
+    let request = self.indexedDB.open('form-data', 1);
+
+    console.log('submitFormDataFromIndexedDB');
 
     request.onerror = function(event) {
       console.error('Error opening IndexedDB:', event.target.error);
       reject();
     };
 
-    request.onsuccess = function(event) {
+    request.onsuccess = function (event) {
       let db = event.target.result;
-
       // Get the form data from the IndexedDB
-      let transaction = db.transaction(['form-open-ticket-data'], 'readonly');
-      let objectStore = transaction.objectStore('form-open-ticket-data');
+      let transaction = db.transaction(["form-data"], "readonly");
+      let objectStore = transaction.objectStore("form-data");
       let request = objectStore.getAll();
 
       request.onsuccess = function(event) {
         let formData = event.target.result;
 
-        // Submit the form data to the server
-        fetch('/open.php', {
-          method: 'POST',
-          body: formData
-        })
-          .then(response => response.json())
-          .then(json => {
-            console.log('Form data submitted:', json);
-            resolve();
-          })
-          .catch(error => {
-            console.error('Error submitting form data:', error);
-            reject();
+        let submit = $.map(formData, function (e) {
+          // Submit the form data to the server
+          $.ajax({
+            type: "POST",
+            url: "/api/create-ticket.php",
+            data: e,
+            success: function (response) {
+              console.log(response);
+            },
           });
-      };
+        });
 
-      request.onerror = function(event) {
-        console.error('Error getting form data from IndexedDB:', event.target.error);
-        reject();
-      };
-    };
-  });
-}
-
-function getFormDataFromIndexedDB() {
-  return new Promise((resolve, reject) => {
-    // Open a connection to the IndexedDB
-    let request = self.indexedDB.open('form-open-ticket-data', 1);
-
-    request.onerror = function(event) {
-      console.error('Error opening IndexedDB:', event.target.error);
-      reject();
-    };
-
-    request.onsuccess = function(event) {
-      let db = event.target.result;
-
-      // Get the form data from the IndexedDB
-      let transaction = db.transaction(['form-open-ticket-data'], 'readonly');
-      let objectStore = transaction.objectStore('form-open-ticket-data');
-      let request = objectStore.getAll();
-
-      request.onsuccess = function(event) {
-        let formData = event.target.result;
-        console.log('Form data retrieved from IndexedDB:', formData);
-        resolve(formData);
+        if(submit){
+          this.deleteFormDataInIndexedDB();
+        }else{
+          console.log('Error submitting form data to server');
+        }
       };
 
       request.onerror = function(event) {
@@ -362,7 +237,7 @@ function storeFormDataInIndexedDB() {
 function deleteFormDataInIndexedDB() {
   return new Promise((resolve, reject) => {
     // Open a connection to the IndexedDB
-    let request = self.indexedDB.open('form-open-ticket-data', 1);
+    let request = self.indexedDB.open('form-data', 1);
 
     request.onerror = function(event) {
       console.error('Error opening IndexedDB:', event.target.error);
@@ -373,8 +248,8 @@ function deleteFormDataInIndexedDB() {
       let db = event.target.result;
 
       // Delete the form data from the IndexedDB
-      let transaction = db.transaction(['form-open-ticket-data'], 'readwrite');
-      let objectStore = transaction.objectStore('form-open-ticket-data');
+      let transaction = db.transaction(['form-data'], 'readwrite');
+      let objectStore = transaction.objectStore('form-data');
       let request = objectStore.clear();
 
       request.onsuccess = function(event) {

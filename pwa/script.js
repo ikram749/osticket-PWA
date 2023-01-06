@@ -62,6 +62,8 @@ send_form.addEventListener("click", function () {
           },
         });
       });
+
+      //delete indexeddb
     };
 
     request.onerror = function (event) {
