@@ -170,7 +170,7 @@ function submitFormDataFromIndexedDB() {
       //let objectStore = transaction.objectStore("form-data");
       //let request = objectStore.getAll();
 
-      const db = request.result;
+      const db = event.target.result;
       const store = db.transaction('form-data').objectStore('form-data');
       const request = store.openCursor();
 
