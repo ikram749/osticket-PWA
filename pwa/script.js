@@ -51,7 +51,7 @@ send_form.addEventListener("click", function () {
     request.onsuccess = function (event) {
       let formData = event.target.result;
 
-      $.map(formData, function( a ) {
+      $.map(formData, function( e ) {
         console.log(e);
       });
 
