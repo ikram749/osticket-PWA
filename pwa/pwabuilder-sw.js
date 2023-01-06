@@ -4,6 +4,7 @@ const CACHE = "pwa";
 
 const PRECACHE_ASSETS = [
   "/",
+  "/images/FhHRx-Spinner.gif",
   "/view.php",
   "/open.php",
   "/css/osticket.css",
