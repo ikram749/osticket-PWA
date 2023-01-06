@@ -199,3 +199,20 @@ window.addEventListener("offline", function () {
   alert("Oh no, you lost your network connection.");
 });
  */
+
+const form = document.querySelector('ticketForm');
+
+form.addEventListener('submit', (event) => {
+  if (!navigator.onLine) {
+    event.preventDefault();
+    console.log('You are currently offline submitted');
+  }
+});
+
+window.addEventListener('online', () => {
+  console.log("You are online!");
+});
+
+window.addEventListener('offline', () => {
+  console.log('You are currently offline');
+});
