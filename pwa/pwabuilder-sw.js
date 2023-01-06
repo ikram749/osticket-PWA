@@ -209,7 +209,7 @@ function submitFormDataFromIndexedDBTest() {
         const cursor =  event.target.result;
         if (cursor) {
           //console.log(cursor.value);
-          fetch('/api/create-ticket.php', {
+          /* fetch('/api/create-ticket.php', {
             method: 'POST',
             headers: {  
               "Content-type": "application/x-www-form-urlencoded; charset=UTF-8"  
@@ -217,10 +217,20 @@ function submitFormDataFromIndexedDBTest() {
             body: cursor.value
           })
           .then(response => response.json())
-          .then(response => console.log(JSON.stringify(response)))
+          .then(response => console.log(response))
           .catch((error) => {
             console.log('Request failed', error);  
+          }); */
+
+          $.ajax({
+            type: "POST",
+            url: "/api/create-ticket.php",
+            data: cursor.value,
+            success: function (response) {
+              console.log(response);
+            },
           });
+
           cursor.continue();
         }
 
