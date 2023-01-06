@@ -200,7 +200,7 @@ function submitFormDataFromIndexedDB() {
   });
 }
 
-function storeFormDataInIndexedDB() {
+/* function storeFormDataInIndexedDB() {
   return new Promise((resolve, reject) => {
     // Open a connection to the IndexedDB
     let request = self.indexedDB.open('form-open-ticket-data', 1);
@@ -233,7 +233,7 @@ function storeFormDataInIndexedDB() {
       };
     };
   });
-}
+} */
 
 
 function deleteFormDataInIndexedDB() {

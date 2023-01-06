@@ -122,21 +122,6 @@ function startPwa(firstStart) {
           console.error("Registration failed:", err);
         });
 
-      //sync
-      navigator.serviceWorker.ready.then((registration) => {
-        if (registration.sync) {
-          // Background Sync is supported.
-          console.log("Background Sync is supported");
-        } else {
-          // Background Sync isn't supported.
-          console.log("Background Sync isn`t supported");
-        }
-      });
-
-      /* navigator.serviceWorker.controller.postMessage({ 
-				type: `IS_OFFLINE`
-				// add more properties if needed
-			  }); */
     } else console.log("Your browser does not support the Service-Worker!");
   });
 }
@@ -178,8 +163,6 @@ function removestorage() {
 $("#ticketForm").submit(function (e) {
   e.preventDefault();
   if (!navigator.onLine) {
-    
-
     let formData = $("#ticketForm").serialize();
     let request = window.indexedDB.open("form-data", 1);
 
@@ -191,6 +174,11 @@ $("#ticketForm").submit(function (e) {
       let addRequest = objectStore.add(formData);
       addRequest.onsuccess = function (event) {
         console.log("Form data added to IndexedDB");
+
+        navigator.serviceWorker.ready.then((registration) => {
+          return registration.sync.register('form-submission');
+        });
+
         $('#overlay,#loading').hide();
         $('input[type="submit"]').prop('disabled', false);
       };
