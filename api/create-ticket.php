@@ -8,11 +8,6 @@ if ($_POST) {
     $vars['deptId']=$vars['emailId']=0; //Just Making sure we don't accept crap...only topicId is expected.
     if ($thisclient) {
         $vars['uid']=$thisclient->getId();
-    } elseif($cfg->isCaptchaEnabled()) {
-        if(!$_POST['captcha'])
-            $errors['captcha']=__('Enter text shown on the image');
-        elseif(strcmp($_SESSION['captcha'], md5(strtoupper($_POST['captcha']))))
-            $errors['captcha']=sprintf('%s - %s', __('Invalid'), __('Please try again!'));
     }
 
     $tform = TicketForm::objects()->one()->getForm($vars);
@@ -30,20 +25,10 @@ if ($_POST) {
     //Ticket::create...checks for errors..
     if(($ticket=Ticket::create($vars, $errors, SOURCE))){
         $msg=__('Support ticket request created');
-        // Drop session-backed form data
-        unset($_SESSION[':form-data']);
-        //Logged in...simply view the newly created ticket.
-        if ($thisclient && $thisclient->isValid()) {
-            // Regenerate session id
-            $thisclient->regenerateSession();
-            @header('Location: tickets.php?id='.$ticket->getId());
-        } else
-            $ost->getCSRF()->rotate();
     }else{
-        $errors['err'] = $errors['err'] ?: sprintf('%s %s',
-            __('Unable to create a ticket.'),
-            __('Correct any errors below and try again.'));
+        $msg=__('Unable to create a ticket');
     }
+    return $msg;
 }
 ?>
 ok
