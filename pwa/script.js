@@ -5,7 +5,6 @@ let removeButton = document.getElementById("remove");
 
 let insert_form = document.getElementById("insert_form");
 let send_form = document.getElementById("send_form");
-const form = document.querySelector('ticketForm');
 
 insert_form.addEventListener("click", function (event) {
   let formData = $("#ticketForm").serialize();
@@ -142,23 +141,6 @@ function startPwa(firstStart) {
   });
 }
 
-/* function cacheLinks() {
-	self.addEventListener('install', event => {
-		const links = [];
-	  
-		document.querySelectorAll('a').forEach(link => {
-		  links.push(link.href);
-		});
-	  
-		event.waitUntil(
-		  caches.open('pwa').then(cache => {
-			console.log(links);
-			return cache.addAll(links);
-		  })
-		);
-	  });
-} */
-
 function cacheLinks() {
   caches.open("pwa").then(function (cache) {
     const linksFound = [];
@@ -201,8 +183,8 @@ window.addEventListener("offline", function () {
 });
  */
 
-
-form.addEventListener('submit', (event) => {
+$("#ticketForm").submit(function (e) {
+  e.preventDefault();
   if (!navigator.onLine) {
     event.preventDefault();
     console.log('You are currently offline submitted');
