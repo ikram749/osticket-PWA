@@ -208,6 +208,7 @@ function submitFormDataFromIndexedDBTest() {
       cursorRequest.onsuccess = function(event) {
         const cursor =  event.target.result;
         if (cursor) {
+          console.log(cursor.value);
           fetch('/api/create-ticket.php', {
             method: 'POST',
             body: cursor.value
@@ -219,6 +220,8 @@ function submitFormDataFromIndexedDBTest() {
           });
           cursor.continue();
         }
+
+
       };
     };
     request.onerror = function(event) {
