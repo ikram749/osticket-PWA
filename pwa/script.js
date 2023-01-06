@@ -77,7 +77,7 @@ send_form.addEventListener("click", function () {
           type: 'POST',
           url: '/api/create-ticket.php',
           headers: {"X_API_Key":'647A30264EC76F864FE6DA955A686267',"X-API-Key":'647A30264EC76F864FE6DA955A686267'},
-          data: formData,
+          data: event.target.result,
           success: function(response) {
             console.log(response);
           }
