@@ -142,6 +142,10 @@ self.addEventListener("fetch", (event) => {
   }
 }); */
 
+self.addEventListener("online", function () {
+  alert('submitFormDataFromIndexedDB');
+});
+
 // Network is back up, we're being awaken, let's do the requests we were trying to do before if any.
 self.addEventListener("sync", (event) => {
   alert('submitFormDataFromIndexedDB');
