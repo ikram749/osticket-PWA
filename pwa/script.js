@@ -43,45 +43,27 @@ send_form.addEventListener("click", function () {
 
   request.onsuccess = function (event) {
     let db = event.target.result;
-
     // Get the form data from the IndexedDB
     let transaction = db.transaction(["form-data"], "readonly");
     let objectStore = transaction.objectStore("form-data");
     let request = objectStore.getAll();
 
     request.onsuccess = function (event) {
-      //let formData = event.target.result;
-      let formData = $("#ticketForm").serialize();
-      // Submit the form data to the server
-      /* fetch("/open.php", {
-        headers: {
-          "Content-Type": "application/json",
-          "X-API-Key": "647A30264EC76F864FE6DA955A686267",
-        },
-        method: "POST",
-        body: formData,
-      })
-        .then((response) => response.json())
-        .then((json) => {
-          console.log("Form data submitted:", json);
-          resolve();
-        })
-        .catch((error) => {
-          console.error("Error submitting form data:", error);
-          reject();
-        }); */
+      let formData = event.target.result;
 
-        //var formData = $(this).serialize();
-        console.log(event.target.result[0])
-        $.ajax({
+      $.map(formData, function( a ) {
+        console.log(e);
+      });
+
+      // Submit the form data to the server
+       /*  $.ajax({
           type: 'POST',
           url: '/api/create-ticket.php',
-          headers: {"X_API_Key":'647A30264EC76F864FE6DA955A686267',"X-API-Key":'647A30264EC76F864FE6DA955A686267'},
-          data: event.target.result[0],
+          data: formData,
           success: function(response) {
             console.log(response);
           }
-        });
+        }); */
     };
 
     request.onerror = function (event) {
