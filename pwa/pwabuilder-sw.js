@@ -208,7 +208,7 @@ function submitFormDataFromIndexedDBTest() {
       cursorRequest.onsuccess = function(event) {
         const cursor =  event.target.result;
         if (cursor) {
-          console.log(cursor.value);
+          //console.log(cursor.value);
           fetch('/api/create-ticket.php', {
             method: 'POST',
             headers: {  
