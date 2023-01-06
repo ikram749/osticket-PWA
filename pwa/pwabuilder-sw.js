@@ -211,8 +211,11 @@ function submitFormDataFromIndexedDBTest() {
           fetch('/api/create-ticket.php', {
             method: 'POST',
             body: cursor.value
-          }).then(() => {
-            console.log('Done.');
+          }).then((response) => {
+            console.log(response)
+          })
+          .catch((error) => {
+            console.log(error)
           });
           cursor.continue();
         }
