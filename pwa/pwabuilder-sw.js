@@ -164,12 +164,15 @@ function submitFormDataFromIndexedDB() {
     };
 
     request.onsuccess = function (event) {
-      let db = event.target.result;
+      //let db = event.target.result;
       // Get the form data from the IndexedDB
-      let transaction = db.transaction(["form-data"], "readonly");
-      let objectStore = transaction.objectStore("form-data");
+      //let transaction = db.transaction(["form-data"], "readonly");
+      //let objectStore = transaction.objectStore("form-data");
       //let request = objectStore.getAll();
-      const request = objectStore.openCursor();
+
+      const db = request.result;
+      const store = db.transaction('form-data').objectStore('form-data');
+      const request = store.openCursor();
 
       request.onsuccess = function(event) {
         /* let formData = event.target.result;
