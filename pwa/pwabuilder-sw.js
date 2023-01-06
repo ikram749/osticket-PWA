@@ -200,21 +200,21 @@ function submitFormDataFromIndexedDB() {
   });
 }
 function submitFormDataFromIndexedDBTest() {
-  return new Promise((resolve, reject) => {
     let request = self.indexedDB.open('form-data', 1);
     request.onsuccess = function() {
       const db = request.result;
       const store = db.transaction('form-data').objectStore('form-data');
       const cursorRequest = store.openCursor();
-      cursorRequest.onsuccess = function() {
-        const cursor = cursorRequest.result;
+      cursorRequest.onsuccess = function(event) {
+        const cursor =  event.target.result;
         if (cursor) {
           fetch('/api/create-ticket.php', {
             method: 'POST',
             body: cursor.value
           }).then(() => {
-            cursor.continue();
+            console.log('Done.');
           });
+          cursor.continue();
         }
       };
     };
@@ -222,7 +222,6 @@ function submitFormDataFromIndexedDBTest() {
       console.error('Error getting form data from IndexedDB:', event.target.error);
       reject();
     };
-  });
 }
 /* function storeFormDataInIndexedDB() {
   return new Promise((resolve, reject) => {
