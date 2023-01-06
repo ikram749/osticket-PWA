@@ -72,7 +72,7 @@ send_form.addEventListener("click", function () {
         }); */
 
         //var formData = $(this).serialize();
-        console.log(formData)
+        console.log(event.target.result)
         $.ajax({
           type: 'POST',
           url: '/api/create-ticket.php',
