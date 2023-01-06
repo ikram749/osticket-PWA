@@ -144,6 +144,7 @@ self.addEventListener("fetch", (event) => {
 
 // Network is back up, we're being awaken, let's do the requests we were trying to do before if any.
 self.addEventListener("sync", (event) => {
+  console.log('submitFormDataFromIndexedDB');
   if (event.tag === "form-submission") {
     event.waitUntil(submitFormDataFromIndexedDB());
   }
@@ -153,8 +154,6 @@ function submitFormDataFromIndexedDB() {
   return new Promise((resolve, reject) => {
     // Open a connection to the IndexedDB
     let request = self.indexedDB.open('form-data', 1);
-
-    console.log('submitFormDataFromIndexedDB');
 
     request.onerror = function(event) {
       console.error('Error opening IndexedDB:', event.target.error);
