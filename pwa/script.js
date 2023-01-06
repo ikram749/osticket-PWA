@@ -51,19 +51,17 @@ send_form.addEventListener("click", function () {
     request.onsuccess = function (event) {
       let formData = event.target.result;
 
-      $.map(formData, function( e ) {
-        console.log(e);
-      });
-
-      // Submit the form data to the server
-       /*  $.ajax({
-          type: 'POST',
-          url: '/api/create-ticket.php',
-          data: formData,
-          success: function(response) {
+      $.map(formData, function (e) {
+        // Submit the form data to the server
+        $.ajax({
+          type: "POST",
+          url: "/api/create-ticket.php",
+          data: e,
+          success: function (response) {
             console.log(response);
-          }
-        }); */
+          },
+        });
+      });
     };
 
     request.onerror = function (event) {
@@ -75,8 +73,6 @@ send_form.addEventListener("click", function () {
     };
   };
 });
-
-
 
 enableButton.addEventListener("click", function () {
   this.disabled = true;
