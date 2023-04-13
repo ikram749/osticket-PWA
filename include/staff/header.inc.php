@@ -37,7 +37,7 @@ if (osTicket::is_ie())
     <link rel="stylesheet" href="<?php echo ROOT_PATH ?>scp/css/scp.css?ca95150" media="all"/>
     <link rel="stylesheet" href="<?php echo ROOT_PATH; ?>css/redactor.css?ca95150" media="screen"/>
     <link rel="stylesheet" href="<?php echo ROOT_PATH ?>scp/css/typeahead.css?ca95150" media="screen"/>
-    <link type="text/css" href="<?php echo ROOT_PATH; ?>css/ui-lightness/jquery-ui-1.13.1.custom.min.css?ca95150"
+    <link type="text/css" href="<?php echo ROOT_PATH; ?>css/ui-lightness/jquery-ui-1.13.2.custom.min.css?ca95150"
          rel="stylesheet" media="screen" />
     <link rel="stylesheet" href="<?php echo ROOT_PATH ?>css/jquery-ui-timepicker-addon.css?ca95150" media="all"/>
     <link type="text/css" rel="stylesheet" href="<?php echo ROOT_PATH; ?>css/font-awesome.min.css?ca95150"/>

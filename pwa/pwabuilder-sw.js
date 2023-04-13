@@ -37,19 +37,15 @@ const PRECACHE_ASSETS = [
 importScripts(
   "https://storage.googleapis.com/workbox-cdn/releases/5.1.2/workbox-sw.js"
 );
-
-//self.importScripts("./localforage-1.10.0.min.js");
-
-self.addEventListener("message", (event) => {
-  alert(event.data.alert);
-  if (event.data && event.data.type === "SKIP_WAITING") {
-    self.skipWaiting();
-  }
-
-  if (event.data && event.data.type === "IS_OFFLINE") {
-    alert(event);
-  }
-});
+if (workbox.navigationPreload.isSupported()) {
+  workbox.navigationPreload.enable();
+}
+workbox.routing.registerRoute(
+  new RegExp("/*"),
+  new workbox.strategies.StaleWhileRevalidate({
+    cacheName: CACHE,
+  })
+);
 
 self.addEventListener("install", async (event) => {
   event.waitUntil(
@@ -59,33 +55,21 @@ self.addEventListener("install", async (event) => {
   );
 });
 
-if (workbox.navigationPreload.isSupported()) {
-  workbox.navigationPreload.enable();
-}
+self.addEventListener("fetch", function(event) {
+	event.respondWith(
+		caches.open("pwa").then(function(cache) {
+			return cache.match(event.request).then(function(response) {
+				cache.addAll([event.request.url]);
 
-workbox.routing.registerRoute(
-  new RegExp("/*"),
-  new workbox.strategies.StaleWhileRevalidate({
-    cacheName: CACHE,
-  })
-);
+				if(response) {
+					return response;
+				}
 
-self.addEventListener("activate", (event) => {
-  event.waitUntil(
-    (async () => {
-      const names = await caches.keys();
-      await Promise.all(
-        names.map((name) => {
-          if (name !== CACHE) {
-            return caches.delete(name);
-          }
-        })
-      );
-      await clients.claim();
-    })()
-  );
+				return fetch(event.request);
+			});
+		})
+	);
 });
-
 
 // Store form data in IndexedDB
 self.addEventListener('submit', function(e) {
@@ -93,27 +77,8 @@ self.addEventListener('submit', function(e) {
   storeFormData();
 });
 
-self.addEventListener("fetch", (event) => {
-  event.respondWith(async () => {
-    const cache = await caches.open(CACHE);
-    // Try the cache first.
-    const cachedResponse = await cache.match(event.request);
-    if (cachedResponse !== undefined) {
-      // Cache hit, let's send the cached resource.
-      return cachedResponse;
-    } else {
-      const fetchResponse = await fetch(event.request);
-      cache.put(event.request, fetchResponse.clone());
-      return fetchResponse;
-    }
-  });
-
-  alert('fetch') ;
-});
-
 // Network is back up, we're being awaken, let's do the requests we were trying to do before if any.
 self.addEventListener("sync", (event) => {
-  alert("submitFormDataSync");
   console.log(event.tag);
   /* if (event.tag === "form-submission") {
     event.waitUntil(submitFormDataSync());
@@ -138,7 +103,7 @@ function submitFormDataSync() {
       .then((response) => {
         localStorage.removeItem("form-data");
         // Handle response from server
-        //$("#overlay,#loading").hide();
+        $("#overlay,#loading").hide();
         response.status == 200
           ? deleteFormDataInIndexedDB()
           : alert("Form data failed to submit");
@@ -161,7 +126,7 @@ function storeFormData() {
     })
       .then((response) => {
         // Handle response from server
-        //$("#overlay,#loading").hide();
+        $("#overlay,#loading").hide();
         response.status == 200
           ? window.location.reload()
           : alert("Form data failed to submit");

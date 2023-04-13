@@ -1,57 +1,23 @@
-let url = "/";
-const CACHE = 'pwa';
-
-self.addEventListener("install", function(event) {
-	event.waitUntil(
-		caches.open(CACHE).then(function(cache) {
-			console.log(cache);
-			return cache.addAll([
-				url,
-				//url+"css/osticket.css",
-				//url+"css/theme.css",
-				//url+"css/print.css",
-				url+"scp/css/typeahead.css",
-				url+"css/ui-lightness/jquery-ui-1.13.1.custom.min.css",
-				url+"css/jquery-ui-timepicker-addon.css",
-				url+"css/thread.css",
-				url+"css/redactor.css",
-				url+"css/font-awesome.min.css",
-				url+"css/flags.css",
-				url+"css/rtl.css",
-				url+"css/select2.min.css",
-				url+"js/jquery-3.5.1.min.js",
-				url+"js/jquery-ui-1.13.1.custom.min.js",
-				url+"js/jquery-ui-timepicker-addon.js",
-				url+"js/osticket.js",
-				url+"js/filedrop.field.js",
-				url+"scp/js/bootstrap-typeahead.js",
-				url+"js/redactor.min.js",
-				url+"js/redactor-plugins.js",
-				url+"js/redactor-osticket.js",
-				url+"js/select2.min.js",
-				url+"pwa/manifest.json"
-			]);
-		})
-	);
+self.addEventListener("install", function (event) {
+  event.waitUntil(
+    caches.open("pwa").then(function (cache) {
+      return cache.addAll(["../", "../css/osticket.css", "../js/osticket.js"]);
+    })
+  );
 });
 
-
-
-self.addEventListener("fetch", function(event) {
-	event.respondWith(
-		caches.open(CACHE).then(function(cache) {
-			return cache.match(event.request).then(function(response) {
-				console.log(event.request.url);
-				cache.addAll([event.request.url]);
-
-				if(response) {
-					return response;
-				}
-
-				return fetch(event.request);
-			});
-		})
-	);
+self.addEventListener("fetch", (event) => {
+  event.respondWith(async () => {
+    const cache = await caches.open(CACHE);
+    // Try the cache first.
+    const cachedResponse = await cache.match(event.request);
+    if (cachedResponse !== undefined) {
+      // Cache hit, let's send the cached resource.
+      return cachedResponse;
+    } else {
+      const fetchResponse = await fetch(event.request);
+      cache.put(event.request, fetchResponse.clone());
+      return fetchResponse;
+    }
+  });
 });
-
-
