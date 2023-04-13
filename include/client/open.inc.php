@@ -67,6 +67,7 @@ if ($info['topicId'] && ($topic=Topic::lookup($info['topicId']))) {
                       {
                         data: data,
                         dataType: 'json',
+                        cache: true,
                         success: function(json) {
                           $('#dynamic-form').empty().append(json.html);
                           $(document.head).append(json.media);

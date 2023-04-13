@@ -38,7 +38,7 @@ const PRECACHE_ASSETS = [
   "https://storage.googleapis.com/workbox-cdn/releases/5.1.2/workbox-sw.js"
 ); */
 
-self.importScripts("./localforage-1.10.0.min.js");
+//self.importScripts("./localforage-1.10.0.min.js");
 
 self.addEventListener("message", (event) => {
   alert(event.data.alert);
