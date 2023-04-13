@@ -34,9 +34,9 @@ const PRECACHE_ASSETS = [
   "../pwa/manifest.json",
 ];
 
-importScripts(
+/* importScripts(
   "https://storage.googleapis.com/workbox-cdn/releases/5.1.2/workbox-sw.js"
-);
+); */
 
 self.importScripts("./localforage-1.10.0.min.js");
 
