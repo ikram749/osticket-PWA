@@ -57,33 +57,32 @@ workbox.routing.registerRoute(
 );
 
 self.addEventListener("install", async (event) => {
-  event.waitUntil(
-    //caches.open(CACHE)
-    //.then((cache) => cache.add(offlineFallbackPage))
-    caches.open(CACHE).then((cache) => cache.addAll(PRECACHE_ASSETS))
-  );
+  event.waitUntil((async () => {
+    const cache = await caches.open(CACHE);
+    cache.addAll(PRECACHE_ASSETS);
+  })());
 });
 
-self.addEventListener('fetch', (event) => {
-  if (event.request.mode === 'navigate') {
-    event.respondWith((async () => {
-      try {
-        const preloadResp = await event.preloadResponse;
+self.addEventListener('activate', event => {
+  event.waitUntil(clients.claim());
+});
 
-        if (preloadResp) {
-          return preloadResp;
-        }
+self.addEventListener('fetch', event => {
+  event.respondWith(async () => {
+      const cache = await caches.open(CACHE_NAME);
 
-        const networkResp = await fetch(event.request);
-        return networkResp;
-      } catch (error) {
+      // match the request to our cache
+      const cachedResponse = await cache.match(event.request);
 
-        const cache = await caches.open(CACHE);
-        const cachedResp = await cache.match(offlineFallbackPage);
-        return cachedResp;
-      }
-    })());
-  }
+      // check if we got a valid response
+      if (cachedResponse !== undefined) {
+          // Cache hit, return the resource
+          return cachedResponse;
+      } else {
+        // Otherwise, go to the network
+          return fetch(event.request)
+      };
+  });
 });
 
 
