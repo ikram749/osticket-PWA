@@ -38,7 +38,7 @@ function startPwa(firstStart) {
     if ("serviceWorker" in navigator) {
       //navigator.serviceWorker.register("/pwa/service-worker.js?v="+d.getTime())
       navigator.serviceWorker
-        .register("./pwa/pwabuilder-sw.js?v=" + d.getTime(), {
+        .register("./pwa/pwabuilder-sw copy.js?v=" + d.getTime(), {
           scope: "./pwa/", // THIS IS REQUIRED FOR RUNNING A PROGRESSIVE WEB APP FROM A NON_ROOT PATH
         })
         .then((registration) => {
