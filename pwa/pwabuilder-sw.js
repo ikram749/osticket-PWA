@@ -119,7 +119,7 @@ function submitFormDataSync() {
       .then((response) => {
         localStorage.removeItem("form-data");
         // Handle response from server
-        $("#overlay,#loading").hide();
+        //$("#overlay,#loading").hide();
         response.status == 200
           ? deleteFormDataInIndexedDB()
           : alert("Form data failed to submit");
@@ -142,7 +142,7 @@ function storeFormData() {
     })
       .then((response) => {
         // Handle response from server
-        $("#overlay,#loading").hide();
+        //$("#overlay,#loading").hide();
         response.status == 200
           ? window.location.reload()
           : alert("Form data failed to submit");
