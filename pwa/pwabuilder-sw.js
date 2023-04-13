@@ -34,9 +34,10 @@ const PRECACHE_ASSETS = [
   "../pwa/manifest.json",
 ];
 
-/* importScripts(
+importScripts(
   "https://storage.googleapis.com/workbox-cdn/releases/5.1.2/workbox-sw.js"
-); */
+);
+
 self.importScripts("./localforage-1.10.0.min.js");
 
 self.addEventListener("message", (event) => {
@@ -58,9 +59,9 @@ self.addEventListener("install", async (event) => {
   );
 });
 
-/* if (workbox.navigationPreload.isSupported()) {
+if (workbox.navigationPreload.isSupported()) {
   workbox.navigationPreload.enable();
-} */
+}
 
 workbox.routing.registerRoute(
   new RegExp("/*"),
