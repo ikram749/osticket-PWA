@@ -35,33 +35,33 @@ if (osTicket::is_ie())
     <meta name="description" content="customer support platform">
     <meta name="keywords" content="osTicket, Customer support system, support ticket system">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" href="<?php echo ROOT_PATH; ?>css/osticket.css" media="screen">
-    <link rel="stylesheet" href="<?php echo ASSETS_PATH; ?>css/theme.css" media="screen">
-    <link rel="stylesheet" href="<?php echo ASSETS_PATH; ?>css/print.css" media="print">
-    <link rel="stylesheet" href="<?php echo ROOT_PATH; ?>scp/css/typeahead.css"
+	<link rel="stylesheet" href="<?php echo ROOT_PATH; ?>css/osticket.css?ca95150" media="screen"/>
+    <link rel="stylesheet" href="<?php echo ASSETS_PATH; ?>css/theme.css?ca95150" media="screen"/>
+    <link rel="stylesheet" href="<?php echo ASSETS_PATH; ?>css/print.css?ca95150" media="print"/>
+    <link rel="stylesheet" href="<?php echo ROOT_PATH; ?>scp/css/typeahead.css?ca95150"
          media="screen" />
-    <link type="text/css" href="<?php echo ROOT_PATH; ?>css/ui-lightness/jquery-ui-1.13.1.custom.min.css"
+    <link type="text/css" href="<?php echo ROOT_PATH; ?>css/ui-lightness/jquery-ui-1.13.1.custom.min.css?ca95150"
         rel="stylesheet" media="screen" />
-    <link rel="stylesheet" href="<?php echo ROOT_PATH ?>css/jquery-ui-timepicker-addon.css" media="all">
-    <link rel="stylesheet" href="<?php echo ROOT_PATH; ?>css/thread.css" media="screen">
-    <link rel="stylesheet" href="<?php echo ROOT_PATH; ?>css/redactor.css" media="screen">
-    <link type="text/css" rel="stylesheet" href="<?php echo ROOT_PATH; ?>css/font-awesome.min.css">
-    <link type="text/css" rel="stylesheet" href="<?php echo ROOT_PATH; ?>css/flags.css">
-    <link type="text/css" rel="stylesheet" href="<?php echo ROOT_PATH; ?>css/rtl.css"/>
-    <link type="text/css" rel="stylesheet" href="<?php echo ROOT_PATH; ?>css/select2.min.css">
+    <link rel="stylesheet" href="<?php echo ROOT_PATH ?>css/jquery-ui-timepicker-addon.css?ca95150" media="all"/>
+    <link rel="stylesheet" href="<?php echo ROOT_PATH; ?>css/thread.css?ca95150" media="screen"/>
+    <link rel="stylesheet" href="<?php echo ROOT_PATH; ?>css/redactor.css?ca95150" media="screen"/>
+    <link type="text/css" rel="stylesheet" href="<?php echo ROOT_PATH; ?>css/font-awesome.min.css?ca95150"/>
+    <link type="text/css" rel="stylesheet" href="<?php echo ROOT_PATH; ?>css/flags.css?ca95150"/>
+    <link type="text/css" rel="stylesheet" href="<?php echo ROOT_PATH; ?>css/rtl.css?ca95150"/>
+    <link type="text/css" rel="stylesheet" href="<?php echo ROOT_PATH; ?>css/select2.min.css?ca95150"/>
     <!-- Favicons -->
     <link rel="icon" type="image/png" href="<?php echo ROOT_PATH ?>images/oscar-favicon-32x32.png" sizes="32x32" />
     <link rel="icon" type="image/png" href="<?php echo ROOT_PATH ?>images/oscar-favicon-16x16.png" sizes="16x16" />
-    <script type="text/javascript" src="<?php echo ROOT_PATH; ?>js/jquery-3.5.1.min.js"></script>
-    <script type="text/javascript" src="<?php echo ROOT_PATH; ?>js/jquery-ui-1.13.1.custom.min.js"></script>
-    <script type="text/javascript" src="<?php echo ROOT_PATH; ?>js/jquery-ui-timepicker-addon.js"></script>
-    <script src="<?php echo ROOT_PATH; ?>js/osticket.js"></script>
-    <script type="text/javascript" src="<?php echo ROOT_PATH; ?>js/filedrop.field.js"></script>
-    <script src="<?php echo ROOT_PATH; ?>scp/js/bootstrap-typeahead.js"></script>
-    <script type="text/javascript" src="<?php echo ROOT_PATH; ?>js/redactor.min.js"></script>
-    <script type="text/javascript" src="<?php echo ROOT_PATH; ?>js/redactor-plugins.js"></script>
-    <script type="text/javascript" src="<?php echo ROOT_PATH; ?>js/redactor-osticket.js"></script>
-    <script type="text/javascript" src="<?php echo ROOT_PATH; ?>js/select2.min.js"></script>
+    <script type="text/javascript" src="<?php echo ROOT_PATH; ?>js/jquery-3.6.3.min.js?ca95150"></script>
+    <script type="text/javascript" src="<?php echo ROOT_PATH; ?>js/jquery-ui-1.13.2.custom.min.js?ca95150"></script>
+    <script type="text/javascript" src="<?php echo ROOT_PATH; ?>js/jquery-ui-timepicker-addon.js?ca95150"></script>
+    <script src="<?php echo ROOT_PATH; ?>js/osticket.js?ca95150"></script>
+    <script type="text/javascript" src="<?php echo ROOT_PATH; ?>js/filedrop.field.js?ca95150"></script>
+    <script src="<?php echo ROOT_PATH; ?>scp/js/bootstrap-typeahead.js?ca95150"></script>
+    <script type="text/javascript" src="<?php echo ROOT_PATH; ?>js/redactor.min.js?ca95150"></script>
+    <script type="text/javascript" src="<?php echo ROOT_PATH; ?>js/redactor-plugins.js?ca95150"></script>
+    <script type="text/javascript" src="<?php echo ROOT_PATH; ?>js/redactor-osticket.js?ca95150"></script>
+    <script type="text/javascript" src="<?php echo ROOT_PATH; ?>js/select2.min.js?ca95150"></script>
     <?php
     if($ost && ($headers=$ost->getExtraHeaders())) {
         echo "\n\t".implode("\n\t", $headers)."\n";
@@ -86,22 +86,8 @@ if (osTicket::is_ie())
 <?php
     }
     ?>
-
-    <link rel="manifest" href="<?php echo ROOT_PATH; ?>pwa/manifest.json" />
 </head>
 <body>
-<div>
-	
-	<button id="enable">Enable the PWA</button>
-    
-</div>
-<button id="install">Install this app</button>
-<button id="remove">reset</button>
-<button id="insert_form">insert_form</button>
-<button id="send_form">send_form</button>
-<p id="text_pwa">Before you enable the PWA, check out how slow this website is.</p>
-    <p id="text_pwa1"></p>
-
     <div id="container">
         <?php
         if($ost->getError())

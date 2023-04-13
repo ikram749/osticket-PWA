@@ -211,7 +211,6 @@ class ApiController extends Controller {
                 && ($ip=$this->getRemoteAddr()))
             $this->key = API::lookupByKey($key, $ip);
 
-        //$this->key = '647A30264EC76F864FE6DA955A686267';
         return $this->key;
     }
 
