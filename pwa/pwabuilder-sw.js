@@ -59,16 +59,16 @@ self.addEventListener("install", async (event) => {
   );
 });
 
-if (workbox.navigationPreload.isSupported()) {
+/* if (workbox.navigationPreload.isSupported()) {
   workbox.navigationPreload.enable();
-}
+} */
 
-workbox.routing.registerRoute(
+/* workbox.routing.registerRoute(
   new RegExp("/*"),
   new workbox.strategies.StaleWhileRevalidate({
     cacheName: CACHE,
   })
-);
+); */
 
 self.addEventListener("activate", (event) => {
   event.waitUntil(
