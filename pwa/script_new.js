@@ -52,6 +52,43 @@ function startPwa(firstStart) {
   });
 }
 
+window.addEventListener("submit", function (e) {
+  e.preventDefault();
+  if (navigator.onLine) {
+    // User is online, submit the form via AJAX
+    const formData = new FormData(form);
+    fetch("open.php", {
+      method: "POST",
+      body: formData,
+    })
+      .then((response) => {
+        // Handle response from server
+        $("#overlay,#loading").hide();
+        response.status == 200
+          ? window.location.reload()
+          : alert("Form data failed to submit");
+        console.log(response);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  } else {
+    // User is offline, store form data in local storage
+    const formData = new FormData(form);
+    const data = Object.fromEntries(formData.entries());
+    const storedData = localStorage.getItem("form-data");
+    const dataToStore = storedData ? JSON.parse(storedData) : [];
+    dataToStore.push(data);
+    localStorage.setItem("form-data", JSON.stringify(dataToStore));
+
+    /* localStorage.setItem(
+      "form-data",
+      JSON.stringify($("#ticketForm").serialize())
+    ); */
+    alert("Form data stored offline");
+  }
+});
+
 function cacheLinks() {
   caches.open("pwa").then(function (cache) {
     //const linksFound = [];

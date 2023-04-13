@@ -86,18 +86,13 @@ self.addEventListener('fetch', (event) => {
   }
 });
 
-// Store form data in IndexedDB
-self.addEventListener('submit', function(e) {
-  e.preventDefault();
-  storeFormData();
-});
 
 // Network is back up, we're being awaken, let's do the requests we were trying to do before if any.
 self.addEventListener("sync", (event) => {
   console.log(event.tag);
-  /* if (event.tag === "form-submission") {
+  if (event.tag === "form-submission") {
     event.waitUntil(submitFormDataSync());
-  } */
+  }
 });
 
 function submitFormDataSync() {
@@ -128,42 +123,6 @@ function submitFormDataSync() {
       .catch((error) => {
         console.error(error);
       });
-  }
-}
-
-function storeFormData() {
-  if (navigator.onLine) {
-    // User is online, submit the form via AJAX
-    const formData = new FormData(form);
-    fetch("open.php", {
-      method: "POST",
-      body: formData,
-    })
-      .then((response) => {
-        // Handle response from server
-        $("#overlay,#loading").hide();
-        response.status == 200
-          ? window.location.reload()
-          : alert("Form data failed to submit");
-        console.log(response);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  } else {
-    // User is offline, store form data in local storage
-    const formData = new FormData(form);
-    const data = Object.fromEntries(formData.entries());
-    const storedData = localStorage.getItem("form-data");
-    const dataToStore = storedData ? JSON.parse(storedData) : [];
-    dataToStore.push(data);
-    localStorage.setItem("form-data", JSON.stringify(dataToStore));
-
-    /* localStorage.setItem(
-      "form-data",
-      JSON.stringify($("#ticketForm").serialize())
-    ); */
-    alert("Form data stored offline");
   }
 }
 
