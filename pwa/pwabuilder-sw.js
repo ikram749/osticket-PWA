@@ -70,7 +70,7 @@ self.addEventListener("install", async (event) => {
   })
 ); */
 
-self.addEventListener("activate", (event) => {
+/* self.addEventListener("activate", (event) => {
   event.waitUntil(
     (async () => {
       const names = await caches.keys();
@@ -84,7 +84,7 @@ self.addEventListener("activate", (event) => {
       await clients.claim();
     })()
   );
-});
+}); */
 
 
 // Store form data in IndexedDB
@@ -96,9 +96,10 @@ self.addEventListener('submit', function(e) {
 // Network is back up, we're being awaken, let's do the requests we were trying to do before if any.
 self.addEventListener("sync", (event) => {
   alert("submitFormDataSync");
-  if (event.tag === "form-submission") {
+  console.log(event.tag);
+  /* if (event.tag === "form-submission") {
     event.waitUntil(submitFormDataSync());
-  }
+  } */
 });
 
 function submitFormDataSync() {
