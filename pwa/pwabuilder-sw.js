@@ -34,9 +34,9 @@ const PRECACHE_ASSETS = [
   "../pwa/manifest.json",
 ];
 
-/* importScripts(
+importScripts(
   "https://storage.googleapis.com/workbox-cdn/releases/5.1.2/workbox-sw.js"
-); */
+);
 
 //self.importScripts("./localforage-1.10.0.min.js");
 
@@ -59,18 +59,18 @@ self.addEventListener("install", async (event) => {
   );
 });
 
-/* if (workbox.navigationPreload.isSupported()) {
+if (workbox.navigationPreload.isSupported()) {
   workbox.navigationPreload.enable();
-} */
+}
 
-/* workbox.routing.registerRoute(
+workbox.routing.registerRoute(
   new RegExp("/*"),
   new workbox.strategies.StaleWhileRevalidate({
     cacheName: CACHE,
   })
-); */
+);
 
-/* self.addEventListener("activate", (event) => {
+self.addEventListener("activate", (event) => {
   event.waitUntil(
     (async () => {
       const names = await caches.keys();
@@ -84,13 +84,31 @@ self.addEventListener("install", async (event) => {
       await clients.claim();
     })()
   );
-}); */
+});
 
 
 // Store form data in IndexedDB
 self.addEventListener('submit', function(e) {
   e.preventDefault();
   storeFormData();
+});
+
+self.addEventListener("fetch", (event) => {
+  event.respondWith(async () => {
+    const cache = await caches.open(CACHE);
+    // Try the cache first.
+    const cachedResponse = await cache.match(event.request);
+    if (cachedResponse !== undefined) {
+      // Cache hit, let's send the cached resource.
+      return cachedResponse;
+    } else {
+      const fetchResponse = await fetch(event.request);
+      cache.put(event.request, fetchResponse.clone());
+      return fetchResponse;
+    }
+  });
+
+  alert('fetch') ;
 });
 
 // Network is back up, we're being awaken, let's do the requests we were trying to do before if any.
